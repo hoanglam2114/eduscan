@@ -1,36 +1,74 @@
 package org.project.backend.controller;
 
-import lombok.RequiredArgsConstructor;
-import org.project.backend.dto.OcrResult;
-import org.project.backend.service.DocumentService;
+
+import org.project.backend.model.OcrResult;
 import org.project.backend.service.OcrService;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.project.backend.service.export.ExcelExportService;
+import org.project.backend.service.export.PdfExportService;
+import org.project.backend.service.export.WordExportService;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/ocr")
-@RequiredArgsConstructor
+@RequestMapping("/ocr")
 public class OcrController {
 
     private final OcrService ocrService;
-    private final DocumentService documentService;
+    private final WordExportService wordService;
+    private final ExcelExportService excelService;
+    private final PdfExportService pdfService;
 
-    @PostMapping("/scan")
-    public ResponseEntity<byte[]> scanImage(@RequestParam("image") MultipartFile file) {
-        OcrResult result = ocrService.extractText(file);
+    public OcrController(OcrService ocrService,
+                         WordExportService wordService,
+                         ExcelExportService excelService,
+                         PdfExportService pdfService) {
+        this.ocrService = ocrService;
+        this.wordService = wordService;
+        this.excelService = excelService;
+        this.pdfService = pdfService;
+    }
 
-        byte[] docx = documentService.createDocx(result.getText());
+    @PostMapping("/upload")
+    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) throws Exception {
+        String text = ocrService.extractText(file.getBytes());
+        return ResponseEntity.ok(text);
+    }
+
+    @GetMapping("/export")
+    public ResponseEntity<byte[]> export(@RequestParam("format") String format) throws Exception {
+        OcrResult result = ocrService.getLastResult();
+        if (result == null || result.getText() == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        byte[] data;
+        String fileName;
+        MediaType mediaType;
+
+        switch (format.toLowerCase()) {
+            case "word":
+                data = wordService.export(result.getText());
+                fileName = "ocr.docx";
+                mediaType = MediaType.APPLICATION_OCTET_STREAM;
+                break;
+            case "excel":
+                data = excelService.export(result.getText());
+                fileName = "ocr.xlsx";
+                mediaType = MediaType.APPLICATION_OCTET_STREAM;
+                break;
+            case "pdf":
+                data = pdfService.export(result.getText());
+                fileName = "ocr.pdf";
+                mediaType = MediaType.APPLICATION_PDF;
+                break;
+            default:
+                return ResponseEntity.badRequest().body(null);
+        }
+
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"scan.docx\"")
-                .contentType(MediaType.parseMediaType(
-                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
-                .body(docx);
+                .contentType(mediaType)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
+                .body(data);
     }
 }
-

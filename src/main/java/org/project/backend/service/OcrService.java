@@ -1,8 +1,24 @@
 package org.project.backend.service;
 
-import org.project.backend.dto.OcrResult;
 import org.springframework.web.multipart.MultipartFile;
 
-public interface OcrService {
-    OcrResult extractText(MultipartFile file);
+
+import org.project.backend.config.GeminiClient;
+import org.project.backend.model.OcrResult;
+import org.springframework.stereotype.Service;
+
+@Service
+public class OcrService {
+    private OcrResult lastResult;
+
+    public String extractText(byte[] image) throws Exception {
+        String text = GeminiClient.extractTextFromImage(image);
+        lastResult = new OcrResult(text);
+        return text;
+    }
+
+    public OcrResult getLastResult() {
+        return lastResult;
+    }
 }
+
