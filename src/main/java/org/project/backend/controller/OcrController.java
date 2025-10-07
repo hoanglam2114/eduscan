@@ -1,74 +1,72 @@
 package org.project.backend.controller;
 
-
+import org.project.backend.model.ExportResult;
 import org.project.backend.model.OcrResult;
+import org.project.backend.service.ExportService;
 import org.project.backend.service.OcrService;
-import org.project.backend.service.export.ExcelExportService;
-import org.project.backend.service.export.PdfExportService;
-import org.project.backend.service.export.WordExportService;
-import org.springframework.http.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import java.util.List;
 
 @RestController
-@RequestMapping("/ocr")
+@RequestMapping("/api")
 public class OcrController {
 
-    private final OcrService ocrService;
-    private final WordExportService wordService;
-    private final ExcelExportService excelService;
-    private final PdfExportService pdfService;
+    private static final Logger log = LoggerFactory.getLogger(OcrController.class);
 
-    public OcrController(OcrService ocrService,
-                         WordExportService wordService,
-                         ExcelExportService excelService,
-                         PdfExportService pdfService) {
+
+    private final OcrService ocrService;
+    private final ExportService exportService;
+
+    public OcrController(OcrService ocrService, ExportService exportService) {
         this.ocrService = ocrService;
-        this.wordService = wordService;
-        this.excelService = excelService;
-        this.pdfService = pdfService;
+        this.exportService = exportService;
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) throws Exception {
-        String text = ocrService.extractText(file.getBytes());
-        return ResponseEntity.ok(text);
+    public ResponseEntity<String> uploadAndExtract(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "provider", defaultValue = "ocrspace") String provider) {
+        try {
+            String text = ocrService.extractText(file.getBytes(), file.getContentType(), provider);
+//            String text = ocrService.extractText(file.getBytes()); // PHIÊN BẢN TEST
+
+            return ResponseEntity.ok(text);
+        } catch (Exception e) {
+            // IN LỖI ĐẦY ĐỦ RA CONSOLE BACKEND
+            log.error("OCR UPLOAD FAILED: ", e);
+            // Trả về một thông báo lỗi rõ ràng hơn cho frontend
+            return ResponseEntity.badRequest().body("Error processing file: " + e.getMessage());
+        }
     }
 
-    @GetMapping("/export")
-    public ResponseEntity<byte[]> export(@RequestParam("format") String format) throws Exception {
-        OcrResult result = ocrService.getLastResult();
-        if (result == null || result.getText() == null) {
+    @PostMapping("/export")
+    public ResponseEntity<byte[]> export(@RequestBody OcrResult result, @RequestParam("format") String format) {
+        try {
+            if (result == null || result.getText() == null) {
+                return ResponseEntity.badRequest().build();
+            }
+            ExportResult exportResult = exportService.export(result.getText(), format);
+            return ResponseEntity.ok()
+                    .contentType(exportResult.getMediaType())
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + exportResult.getFileName() + "\"")
+                    .body(exportResult.getData());
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(null);
         }
+    }
 
-        byte[] data;
-        String fileName;
-        MediaType mediaType;
+    @GetMapping("/providers")
+    public ResponseEntity<List<String>> getOcrProviders() {
+        return ResponseEntity.ok(ocrService.getAvailableProviders());
+    }
 
-        switch (format.toLowerCase()) {
-            case "word":
-                data = wordService.export(result.getText());
-                fileName = "ocr.docx";
-                mediaType = MediaType.APPLICATION_OCTET_STREAM;
-                break;
-            case "excel":
-                data = excelService.export(result.getText());
-                fileName = "ocr.xlsx";
-                mediaType = MediaType.APPLICATION_OCTET_STREAM;
-                break;
-            case "pdf":
-                data = pdfService.export(result.getText());
-                fileName = "ocr.pdf";
-                mediaType = MediaType.APPLICATION_PDF;
-                break;
-            default:
-                return ResponseEntity.badRequest().body(null);
-        }
-
-        return ResponseEntity.ok()
-                .contentType(mediaType)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
-                .body(data);
+    @GetMapping("/formats")
+    public ResponseEntity<List<String>> getExportFormats() {
+        return ResponseEntity.ok(exportService.getAvailableFormats());
     }
 }
