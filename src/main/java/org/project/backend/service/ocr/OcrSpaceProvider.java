@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -25,7 +26,14 @@ public class OcrSpaceProvider implements OcrProvider {
 
     @Override
     public String extractText(byte[] imageBytes, String mimeType) throws IOException {
-        OkHttpClient client = new OkHttpClient();
+//        OkHttpClient client = new OkHttpClient();
+
+        // Cấu hình client với timeout dài hơn
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(Duration.ofSeconds(60))
+                .readTimeout(Duration.ofSeconds(60))
+                .writeTimeout(Duration.ofSeconds(60))
+                .build();
 
         // 1. Tạo request body dạng multipart/form-data
         RequestBody requestBody = new MultipartBody.Builder()

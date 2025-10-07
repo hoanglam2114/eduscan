@@ -30,7 +30,7 @@ public class OcrController {
     @PostMapping("/upload")
     public ResponseEntity<String> uploadAndExtract(
             @RequestParam("file") MultipartFile file,
-            @RequestParam(value = "provider", defaultValue = "ocrspace") String provider) {
+            @RequestParam(value = "provider", defaultValue = "gemini") String provider) {
         try {
             String text = ocrService.extractText(file.getBytes(), file.getContentType(), provider);
 //            String text = ocrService.extractText(file.getBytes()); // PHIÊN BẢN TEST
@@ -38,7 +38,7 @@ public class OcrController {
             return ResponseEntity.ok(text);
         } catch (Exception e) {
             // IN LỖI ĐẦY ĐỦ RA CONSOLE BACKEND
-            log.error("OCR UPLOAD FAILED: ", e);
+//            log.error("OCR UPLOAD FAILED: ", e);
             // Trả về một thông báo lỗi rõ ràng hơn cho frontend
             return ResponseEntity.badRequest().body("Error processing file: " + e.getMessage());
         }
