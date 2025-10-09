@@ -43,7 +43,7 @@ public class GoogleGeminiOcrProvider implements OcrProvider {
                 .put("contents", new JSONArray()
                         .put(new JSONObject()
                                 .put("parts", new JSONArray()
-                                        .put(new JSONObject().put("text", "Trích xuất toàn bộ văn bản trong ảnh này. Chỉ trả về văn bản thô, không thêm bất kỳ định dạng hay giải thích nào."))
+                                        .put(new JSONObject().put("text", "Extract all text from this image. Return only the text content, preserving the structure and formatting as much as possible."))
                                         .put(new JSONObject()
                                                 .put("inlineData", new JSONObject()
                                                         .put("mimeType", mimeType)

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan - EduScan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="/index.html">
+            <div class="logo-placeholder">ES</div>
+            <span class="ms-2 fw-bold">EduScan</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/scan.html">Scan</a></li>
+                <li class="nav-item"><a class="nav-link" href="/history.html">History</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-8">
+
+            <h2 class="text-center mb-4 fw-bold">Upload & Extract Text</h2>
+            <p class="text-center text-muted mb-5">Upload 1-10 images (JPG, PNG) up to 2MB each</p>
+
+            <!-- Upload Section -->
+            <div class="scan-card p-4 mb-4">
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt mb-3"></i>
+                    <h5>Drag & Drop Images Here</h5>
+                    <p class="text-muted mb-3">or</p>
+                    <label for="fileInput" class="btn btn-primary">
+                        <i class="fas fa-folder-open me-2"></i>Browse Files
+                    </label>
+                    <input type="file" id="fileInput" class="d-none" accept="image/jpeg,image/png,image/jpg" multiple>
+                    <p class="text-muted small mt-3 mb-0">Maximum 10 images • JPG, PNG • Max 2MB each</p>
+                </div>
+            </div>
+
+            <!-- Preview Section -->
+            <div id="previewSection" style="display: none;">
+                <h5 class="mb-3">Ảnh đã chọn: <span id="imageCount" class="badge bg-secondary">0 file(s)</span></h5>
+                <div class="preview-container" id="previewContainer"></div>
+                <div class="text-center mt-3">
+                    <label for="providerSelect" class="form-label me-2">Chọn nhà cung cấp OCR:</label>
+                    <select class="form-select d-inline-block w-auto me-2" id="providerSelect">
+                        <option value="gemini" selected>Gemini</option>
+                        <option value="ocrspace">OCR.space</option>
+                        <option value="vision">Google Vision</option>
+                    </select>
+                    <button class="btn btn-primary btn-lg" id="scanBtn" disabled>
+                        <i class="fas fa-camera me-2"></i>Thực hiện OCR
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading Section -->
+            <div id="loadingSection" class="text-center py-5" style="display: none;">
+                <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Processing...</span>
+                </div>
+                <h5>Processing your images...</h5>
+                <p class="text-muted">This may take a few seconds</p>
+            </div>
+
+            <div id="resultsSection" style="display: none;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="mb-0">Văn bản đã trích xuất</h5>
+                    <div>
+                        <button class="btn btn-outline-primary btn-sm me-2" id="saveHistoryBtn">
+                            <i class="fas fa-save me-1"></i>Save to History
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm" id="scanAgainBtn">
+                            <i class="fas fa-redo me-1"></i>Quét lại
+                        </button>
+                    </div>
+
+                </div>
+
+                <div id="resultsContainer"></div>
+
+                <div id="exportSection" class="mt-4 p-3 border rounded" style="display: none;">
+                    <h5 class="mb-3">Tải xuống tất cả kết quả</h5>
+                    <div class="d-flex align-items-center gap-2">
+                        <select class="form-select w-auto" id="exportFormatSelect">
+                            <option value="txt">Text (.txt)</option>
+                            <option value="word">Word (.docx)</option>
+                            <option value="excel">Excel (.xlsx)</option>
+                            <option value="pdf">PDF (.pdf)</option>
+                        </select>
+                        <button class="btn btn-success" id="exportBtn">
+                            <i class="fas fa-download me-2"></i>Tải xuống
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer py-4 bg-dark text-white mt-auto">
+    <div class="container text-center">
+        <p class="mb-0">&copy; 2025 EduScan. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/scan.js"></script>
+</body>
+</html>

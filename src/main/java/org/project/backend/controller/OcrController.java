@@ -1,12 +1,14 @@
 package org.project.backend.controller;
 
 import org.project.backend.model.ExportResult;
+import org.project.backend.model.OcrResponse;
 import org.project.backend.model.OcrResult;
 import org.project.backend.service.ExportService;
 import org.project.backend.service.OcrService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,19 +30,21 @@ public class OcrController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadAndExtract(
-            @RequestParam("file") MultipartFile file,
+    public ResponseEntity<?> uploadAndExtract(
+            @RequestParam("files") MultipartFile[] files,
             @RequestParam(value = "provider", defaultValue = "gemini") String provider) {
-        try {
-            String text = ocrService.extractText(file.getBytes(), file.getContentType(), provider);
-//            String text = ocrService.extractText(file.getBytes()); // PHIÊN BẢN TEST
 
-            return ResponseEntity.ok(text);
+        if (files.length > 10) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Chỉ được phép upload tối đa 10 file.");
+        }
+
+        try {
+            List<OcrResponse> results = ocrService.extractTextFromMultipleFiles(files, provider);
+            return ResponseEntity.ok(results);
         } catch (Exception e) {
-            // IN LỖI ĐẦY ĐỦ RA CONSOLE BACKEND
-//            log.error("OCR UPLOAD FAILED: ", e);
-            // Trả về một thông báo lỗi rõ ràng hơn cho frontend
-            return ResponseEntity.badRequest().body("Error processing file: " + e.getMessage());
+            log.error("OCR UPLOAD FAILED: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Xảy ra lỗi trong quá trình xử lý file: " + e.getMessage());
         }
     }
 
