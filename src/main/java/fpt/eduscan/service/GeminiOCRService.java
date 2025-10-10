@@ -71,7 +71,7 @@ public class GeminiOCRService {
 
         // Parts for the content
         Map<String, Object> textPart = new HashMap<>();
-        textPart.put("text", "Extract all text from this image. Return only the text content, preserving the structure and formatting as much as possible. If there is no text, say 'No text found'.");
+        textPart.put("text", "\"Extract only the text from this image. Do not explain or give steps. If there is no text, say 'No text found'.\\n\\nImage (base64): <base64_image_here>\"");
 
         Map<String, Object> imagePart = new HashMap<>();
         Map<String, Object> inlineData = new HashMap<>();
@@ -116,7 +116,6 @@ public class GeminiOCRService {
                 }
             }
         }
-
         throw new Exception("Could not extract text from Gemini response. Response: " + jsonResponse);
     }
 }
