@@ -359,3 +359,40 @@ body {
     background: var(--primary-color);
     border-radius: 4px;
 }
+
+/* ===================
+   About Page Styles
+   =================== */
+
+.page-header {
+    background: var(--primary-dark);
+    background-size: cover;
+    height: 40vh;
+    min-height: 300px;
+    color: white;
+}
+
+#mission h2, #technology h2, #team h2 {
+    color: var(--text-dark);
+}
+
+.tech-icon {
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.tech-icon img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1rem;
+}
+
+.tech-icon p {
+    margin: 0;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.tech-icon:hover {
+    transform: scale(1.1);
+}

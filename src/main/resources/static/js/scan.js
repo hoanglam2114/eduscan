@@ -1,380 +1,180 @@
-// Configuration
-const MAX_FILES = 5;
-const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
-const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
-const API_BASE_URL = window.location.origin; // Use current domain
+// --- Cấu hình ---
+const MAX_FILES = 10;
+const API_BASE_URL = "/api";
 
-console.log('Scan.js loaded successfully');
-
-// State
-let selectedFiles = [];
-let scanResults = [];
-
-// DOM Elements
+// --- Các đối tượng DOM ---
 const fileInput = document.getElementById('fileInput');
 const uploadArea = document.getElementById('uploadArea');
 const previewSection = document.getElementById('previewSection');
 const previewContainer = document.getElementById('previewContainer');
 const imageCount = document.getElementById('imageCount');
 const scanBtn = document.getElementById('scanBtn');
+const scanAgainBtn = document.getElementById('scanAgainBtn');
 const loadingSection = document.getElementById('loadingSection');
 const resultsSection = document.getElementById('resultsSection');
-const resultsContainer = document.getElementById('resultsContainer');
-const saveHistoryBtn = document.getElementById('saveHistoryBtn');
-const scanAgainBtn = document.getElementById('scanAgainBtn');
+const providerSelect = document.getElementById('providerSelect');
+// DOM cho kết quả và export
+const combinedResultTextarea = document.getElementById('combinedResultTextarea');
+const exportSection = document.getElementById('exportSection');
+const exportFormatSelect = document.getElementById('exportFormatSelect');
+const exportBtn = document.getElementById('exportBtn');
 
-// Event Listeners
+// --- State ---
+let selectedFiles = [];
+
+// --- Event Listeners ---
 fileInput.addEventListener('change', handleFileSelect);
 uploadArea.addEventListener('click', () => fileInput.click());
-uploadArea.addEventListener('dragover', handleDragOver);
-uploadArea.addEventListener('dragleave', handleDragLeave);
-uploadArea.addEventListener('drop', handleDrop);
 scanBtn.addEventListener('click', performOCR);
-saveHistoryBtn.addEventListener('click', saveToHistory);
 scanAgainBtn.addEventListener('click', resetScan);
+exportBtn.addEventListener('click', handleCombinedExport);
 
-// File Selection Handler
-function handleFileSelect(e) {
-    console.log('handleFileSelect triggered');
-    console.log('Files from input:', e.target.files);
-    const files = Array.from(e.target.files);
-    console.log('Files array:', files);
-    addFiles(files);
-}
+// --- Các hàm xử lý ---
 
-// Drag and Drop Handlers
-function handleDragOver(e) {
-    e.preventDefault();
-    uploadArea.classList.add('drag-over');
-}
-
-function handleDragLeave(e) {
-    e.preventDefault();
-    uploadArea.classList.remove('drag-over');
-}
-
-function handleDrop(e) {
-    e.preventDefault();
-    uploadArea.classList.remove('drag-over');
-    const files = Array.from(e.dataTransfer.files);
-    addFiles(files);
-}
-
-// Add Files to Selection
-function addFiles(files) {
-    console.log('addFiles called with:', files.length, 'files');
-
-    // Filter valid files
-    const validFiles = files.filter(file => {
-        console.log('Checking file:', file.name, file.type, file.size);
-
-        // Check file type
-        if (!ALLOWED_TYPES.includes(file.type)) {
-            console.warn('Invalid file type:', file.type);
-            showToast(`${file.name} is not a valid image type (JPG, PNG only)`, 'warning');
-            return false;
-        }
-        // Check file size
-        if (file.size > MAX_FILE_SIZE) {
-            console.warn('File too large:', file.size);
-            showToast(`${file.name} exceeds 2MB limit`, 'warning');
-            return false;
-        }
-        console.log('File is valid:', file.name);
-        return true;
-    });
-
-    console.log('Valid files:', validFiles.length);
-
-    // Check max files limit
-    const remainingSlots = MAX_FILES - selectedFiles.length;
-    if (validFiles.length > remainingSlots) {
-        showToast(`You can only upload ${MAX_FILES} images total`, 'warning');
-        validFiles.splice(remainingSlots);
+function handleFileSelect(event) {
+    const files = Array.from(event.target.files);
+    if (files.length > MAX_FILES) {
+        alert(`Bạn chỉ có thể chọn tối đa ${MAX_FILES} file.`);
+        return;
     }
-
-    // Add to selected files
-    selectedFiles = [...selectedFiles, ...validFiles];
-    console.log('Total selected files now:', selectedFiles.length);
+    selectedFiles = files;
     updatePreview();
 }
 
-// Update Preview Display
 function updatePreview() {
-    console.log('updatePreview called, files:', selectedFiles.length);
-
-    if (selectedFiles.length === 0) {
-        console.log('No files, hiding preview');
-        previewSection.style.display = 'none';
-        return;
-    }
-
-    console.log('Showing preview section');
-    previewSection.style.display = 'block';
-    imageCount.textContent = selectedFiles.length;
     previewContainer.innerHTML = '';
-
-    selectedFiles.forEach((file, index) => {
-        console.log(`Creating preview for file ${index}:`, file.name);
-
-        const col = document.createElement('div');
-        col.className = 'col-6 col-md-4 col-lg-3';
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            console.log(`FileReader loaded for ${file.name}`);
-            col.innerHTML = `
-                <div class="preview-card">
-                    <img src="${e.target.result}" alt="${file.name}">
-                    <button class="remove-btn" onclick="removeFile(${index})">
-                        <i class="fas fa-times"></i>
-                    </button>
-                    <div class="file-name">${file.name}</div>
-                </div>
-            `;
-        };
-        reader.onerror = (error) => {
-            console.error('FileReader error:', error);
-        };
-        reader.readAsDataURL(file);
-
-        previewContainer.appendChild(col);
-    });
-
-    console.log('Preview updated successfully');
-}
-
-// Remove File from Selection
-function removeFile(index) {
-    selectedFiles.splice(index, 1);
-    updatePreview();
-}
-
-// Perform OCR
-async function performOCR() {
-    console.log('performOCR called');
-    console.log('Selected files:', selectedFiles.length);
-
-    if (selectedFiles.length === 0) {
-        showToast('Please select at least one image', 'warning');
-        return;
+    if (selectedFiles.length > 0) {
+        selectedFiles.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'preview-image';
+                previewContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
+        previewSection.style.display = 'block';
+        imageCount.textContent = `${selectedFiles.length} file(s) selected`;
+        scanBtn.disabled = false;
+    } else {
+        previewSection.style.display = 'none';
+        scanBtn.disabled = true;
     }
+}
 
-    // Show loading
+async function performOCR() {
+    if (selectedFiles.length === 0) return;
+
+    uploadArea.style.display = 'none';
     previewSection.style.display = 'none';
-    loadingSection.style.display = 'block';
+    loadingSection.style.display = 'flex';
     resultsSection.style.display = 'none';
 
-    // Prepare FormData
     const formData = new FormData();
-    selectedFiles.forEach((file, index) => {
-        console.log(`Adding file ${index + 1}:`, file.name, file.type, file.size);
-        formData.append('files', file);
-    });
+    selectedFiles.forEach(file => formData.append('files', file));
+    const provider = providerSelect.value;
 
     try {
-        console.log('Calling API:', `${API_BASE_URL}/api/ocr/scan-multiple`);
-
-        // Call API
-        const response = await fetch(`${API_BASE_URL}/api/ocr/scan-multiple`, {
+        const response = await fetch(`${API_BASE_URL}/upload?provider=${provider}`, {
             method: 'POST',
-            body: formData
+            body: formData,
         });
-
-        console.log('Response status:', response.status);
-        console.log('Response ok:', response.ok);
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Error response:', errorText);
-            throw new Error(`Server error: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(await response.text());
 
         const results = await response.json();
-        console.log('Results received:', results);
-        scanResults = results;
-
-        // Display results
         displayResults(results);
 
     } catch (error) {
-        console.error('Error during OCR:', error);
-        showToast('Failed to process images: ' + error.message, 'danger');
+        console.error('OCR Error:', error);
+        alert('OCR thất bại: ' + error.message);
+        resetScan();
+    } finally {
         loadingSection.style.display = 'none';
-        previewSection.style.display = 'block';
     }
 }
 
-// Display Results
 function displayResults(results) {
-    console.log('displayResults called with:', results);
+    const hasSuccessfulResults = results.some(r => r.text);
 
-    loadingSection.style.display = 'none';
+    // Gộp tất cả text vào một chuỗi
+    const combinedText = results
+        .map(result => {
+            if (result.text) {
+                return `--- Kết quả từ file: ${result.fileName} ---\n${result.text}\n`;
+            } else {
+                return `--- Lỗi với file: ${result.fileName} ---\n${result.error}\n`;
+            }
+        })
+        .join("\n" + "=".repeat(50) + "\n");
+
+    // Hiển thị chuỗi đã gộp trong textarea
+    combinedResultTextarea.value = combinedText;
+
     resultsSection.style.display = 'block';
-    resultsContainer.innerHTML = '';
+    // Chỉ hiển thị khu vực export nếu có ít nhất 1 kết quả thành công
+    exportSection.style.display = hasSuccessfulResults ? 'block' : 'none';
+}
 
-    if (!results || results.length === 0) {
-        console.error('No results to display');
-        resultsContainer.innerHTML = '<div class="alert alert-warning">No results returned from server</div>';
+// Hàm xử lý download tổng hợp
+async function handleCombinedExport() {
+    const format = exportFormatSelect.value;
+    // Lấy nội dung trực tiếp từ textarea
+    const textToExport = combinedResultTextarea.value;
+
+    if (!textToExport.trim()) {
+        alert("Không có văn bản để tải xuống.");
         return;
     }
 
-    results.forEach((result, index) => {
-        console.log(`Processing result ${index}:`, result);
+    exportBtn.disabled = true;
+    exportBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Đang tạo...';
 
-        const card = document.createElement('div');
-        card.className = `result-card ${result.success ? '' : 'error'} fade-in`;
+    try {
+        const { blob, fileName } = await exportFile(textToExport, format);
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `tong_hop_${fileName}`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error('Export Error:', error);
+        alert('Tạo file thất bại: ' + error.message);
+    } finally {
+        exportBtn.disabled = false;
+        exportBtn.innerHTML = '<i class="fas fa-download me-2"></i>Tải xuống';
+    }
+}
 
-        if (result.success) {
-            card.innerHTML = `
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h6 class="mb-0"><i class="fas fa-file-image me-2"></i>${result.fileName || 'Unknown'}</h6>
-                    <div>
-                        <button class="btn btn-sm btn-outline-primary me-2" onclick="copyText(${index})">
-                            <i class="fas fa-copy me-1"></i>Copy
-                        </button>
-                        <button class="btn btn-sm btn-outline-secondary" onclick="exportText(${index})">
-                            <i class="fas fa-download me-1"></i>Export
-                        </button>
-                    </div>
-                </div>
-                <div class="result-text" id="result-${index}">${escapeHtml(result.extractedText || 'No text extracted')}</div>
-            `;
-        } else {
-            card.innerHTML = `
-                <div class="d-flex align-items-center">
-                    <i class="fas fa-exclamation-circle text-danger me-2"></i>
-                    <div>
-                        <h6 class="mb-1">${result.fileName || 'Unknown file'}</h6>
-                        <p class="text-danger mb-0">${result.error || 'Failed to extract text'}</p>
-                    </div>
-                </div>
-            `;
-        }
-
-        resultsContainer.appendChild(card);
+// Hàm gọi API để export (không đổi)
+async function exportFile(text, format) {
+    const response = await fetch(`${API_BASE_URL}/export?format=${format}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: text })
     });
+    if (!response.ok) throw new Error(await response.text());
 
-    console.log('Results displayed successfully');
+    const blob = await response.blob();
+    const contentDisposition = response.headers.get('content-disposition');
+    let fileName = `result.${format}`;
+    if (contentDisposition) {
+        const match = contentDisposition.match(/filename="(.+)"/);
+        if (match) fileName = match[1];
+    }
+    return { blob, fileName };
 }
 
-// Copy Text to Clipboard
-function copyText(index) {
-    const text = scanResults[index].extractedText;
-    navigator.clipboard.writeText(text).then(() => {
-        showToast('Text copied to clipboard!', 'success');
-    }).catch(err => {
-        showToast('Failed to copy text', 'danger');
-    });
-}
-
-// Export Text as TXT File
-function exportText(index) {
-    const result = scanResults[index];
-    const blob = new Blob([result.extractedText], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${result.fileName.replace(/\.[^/.]+$/, '')}_extracted.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    showToast('Text exported successfully!', 'success');
-}
-
-// Save to History
-function saveToHistory() {
-    const history = JSON.parse(localStorage.getItem('ocrHistory') || '[]');
-
-    const historyItem = {
-        id: Date.now(),
-        timestamp: new Date().toISOString(),
-        results: scanResults.filter(r => r.success).map(r => ({
-            fileName: r.fileName,
-            extractedText: r.extractedText
-        }))
-    };
-
-    history.unshift(historyItem);
-    localStorage.setItem('ocrHistory', JSON.stringify(history));
-
-    showToast('Saved to history!', 'success');
-
-    // Redirect to history after a short delay
-    setTimeout(() => {
-        window.location.href = 'history.html';
-    }, 1000);
-}
-
-// Reset Scan
 function resetScan() {
     selectedFiles = [];
-    scanResults = [];
     fileInput.value = '';
+    uploadArea.style.display = 'block';
     previewSection.style.display = 'none';
     loadingSection.style.display = 'none';
     resultsSection.style.display = 'none';
-    previewContainer.innerHTML = '';
+    combinedResultTextarea.value = '';
+    scanBtn.disabled = true;
 }
-
-// Show Toast Notification
-function showToast(message, type = 'info') {
-    // Create toast container if it doesn't exist
-    let toastContainer = document.getElementById('toastContainer');
-    if (!toastContainer) {
-        toastContainer = document.createElement('div');
-        toastContainer.id = 'toastContainer';
-        toastContainer.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999;';
-        document.body.appendChild(toastContainer);
-    }
-
-    // Create toast
-    const toast = document.createElement('div');
-    toast.className = `alert alert-${type} alert-dismissible fade show`;
-    toast.style.cssText = 'min-width: 250px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);';
-    toast.innerHTML = `
-        ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    `;
-
-    toastContainer.appendChild(toast);
-
-    // Auto remove after 3 seconds
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 150);
-    }, 3000);
-}
-
-// Escape HTML
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-// Make functions global for inline onclick
-window.removeFile = removeFile;
-window.copyText = copyText;
-window.exportText = exportText;
-
-// Verify all elements exist on page load
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('=== EduScan Scan Page Loaded ===');
-    console.log('fileInput:', fileInput);
-    console.log('uploadArea:', uploadArea);
-    console.log('previewSection:', previewSection);
-    console.log('previewContainer:', previewContainer);
-    console.log('scanBtn:', scanBtn);
-    console.log('loadingSection:', loadingSection);
-    console.log('resultsSection:', resultsSection);
-
-    if (!fileInput) console.error('ERROR: fileInput not found!');
-    if (!uploadArea) console.error('ERROR: uploadArea not found!');
-    if (!previewSection) console.error('ERROR: previewSection not found!');
-    if (!scanBtn) console.error('ERROR: scanBtn not found!');
-
-    console.log('All elements loaded successfully');
-    console.log('=== Ready to scan ===');
-});
