@@ -12,24 +12,22 @@ const scanBtn = document.getElementById('scanBtn');
 const scanAgainBtn = document.getElementById('scanAgainBtn');
 const loadingSection = document.getElementById('loadingSection');
 const resultsSection = document.getElementById('resultsSection');
-const resultsContainer = document.getElementById('resultsContainer');
 const providerSelect = document.getElementById('providerSelect');
-// DOM cho khu vực export
+// DOM cho kết quả và export
+const combinedResultTextarea = document.getElementById('combinedResultTextarea');
 const exportSection = document.getElementById('exportSection');
 const exportFormatSelect = document.getElementById('exportFormatSelect');
 const exportBtn = document.getElementById('exportBtn');
 
-
 // --- State ---
 let selectedFiles = [];
-let scanResults = []; // Biến để lưu kết quả OCR
 
 // --- Event Listeners ---
 fileInput.addEventListener('change', handleFileSelect);
 uploadArea.addEventListener('click', () => fileInput.click());
 scanBtn.addEventListener('click', performOCR);
 scanAgainBtn.addEventListener('click', resetScan);
-exportBtn.addEventListener('click', handleCombinedExport); // Event cho nút export tổng
+exportBtn.addEventListener('click', handleCombinedExport);
 
 // --- Các hàm xử lý ---
 
@@ -85,7 +83,6 @@ async function performOCR() {
         if (!response.ok) throw new Error(await response.text());
 
         const results = await response.json();
-        scanResults = results; // Lưu kết quả vào biến state
         displayResults(results);
 
     } catch (error) {
@@ -98,53 +95,43 @@ async function performOCR() {
 }
 
 function displayResults(results) {
-    resultsContainer.innerHTML = '';
     const hasSuccessfulResults = results.some(r => r.text);
 
-    results.forEach(result => {
-        const resultCard = document.createElement('div');
-        resultCard.className = 'result-card';
-        let contentHTML = `<h4>File: ${result.fileName}</h4>`;
-        if (result.text) {
-            contentHTML += `<textarea readonly rows="5">${result.text}</textarea>`;
-        } else {
-            contentHTML += `<p class="error-text">Lỗi: ${result.error}</p>`;
-        }
-        resultCard.innerHTML = contentHTML;
-        resultsContainer.appendChild(resultCard);
-    });
+    // Gộp tất cả text vào một chuỗi
+    const combinedText = results
+        .map(result => {
+            if (result.text) {
+                return `--- Kết quả từ file: ${result.fileName} ---\n${result.text}\n`;
+            } else {
+                return `--- Lỗi với file: ${result.fileName} ---\n${result.error}\n`;
+            }
+        })
+        .join("\n" + "=".repeat(50) + "\n");
+
+    // Hiển thị chuỗi đã gộp trong textarea
+    combinedResultTextarea.value = combinedText;
 
     resultsSection.style.display = 'block';
     // Chỉ hiển thị khu vực export nếu có ít nhất 1 kết quả thành công
-    if (hasSuccessfulResults) {
-        exportSection.style.display = 'block';
-    }
+    exportSection.style.display = hasSuccessfulResults ? 'block' : 'none';
 }
 
 // Hàm xử lý download tổng hợp
 async function handleCombinedExport() {
     const format = exportFormatSelect.value;
+    // Lấy nội dung trực tiếp từ textarea
+    const textToExport = combinedResultTextarea.value;
 
-    // Tạo nội dung text tổng hợp
-    const combinedText = scanResults
-        .filter(result => result.text)
-        .map(result => `--- Kết quả từ file: ${result.fileName} ---\n${result.text}\n`)
-        .join("\n" + "=".repeat(50) + "\n");
-
-    if (!combinedText.trim()) {
+    if (!textToExport.trim()) {
         alert("Không có văn bản để tải xuống.");
         return;
     }
 
-    // Vô hiệu hóa nút để tránh click nhiều lần
     exportBtn.disabled = true;
     exportBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Đang tạo...';
 
     try {
-        // Gọi API để tạo file
-        const { blob, fileName } = await exportFile(combinedText, format);
-
-        // Logic tải file
+        const { blob, fileName } = await exportFile(textToExport, format);
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -157,7 +144,6 @@ async function handleCombinedExport() {
         console.error('Export Error:', error);
         alert('Tạo file thất bại: ' + error.message);
     } finally {
-        // Bật lại nút sau khi hoàn thành
         exportBtn.disabled = false;
         exportBtn.innerHTML = '<i class="fas fa-download me-2"></i>Tải xuống';
     }
@@ -184,12 +170,11 @@ async function exportFile(text, format) {
 
 function resetScan() {
     selectedFiles = [];
-    scanResults = [];
     fileInput.value = '';
     uploadArea.style.display = 'block';
     previewSection.style.display = 'none';
     loadingSection.style.display = 'none';
     resultsSection.style.display = 'none';
-    exportSection.style.display = 'none';
+    combinedResultTextarea.value = '';
     scanBtn.disabled = true;
 }

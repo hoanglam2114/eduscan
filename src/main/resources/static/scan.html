@@ -13,8 +13,8 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="/index.html">
-            <div class="logo-placeholder">ES</div>
-            <span class="ms-2 fw-bold">EduScan</span>
+            <img src="img/logo.png" alt="EduScan Logo" width="35" height="35" class="me-2">
+            <span class="fw-bold">EduScan</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
@@ -32,9 +32,9 @@
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-lg-10 col-xl-8">
-
             <h2 class="text-center mb-4 fw-bold">Upload & Extract Text</h2>
-            <p class="text-center text-muted mb-5">Upload 1-10 images (JPG, PNG) up to 2MB each</p>
+            <p class="text-center text-muted mb-5">Upload 1-5 images (JPG, PNG) up to 2MB each</p>
+
 
             <!-- Upload Section -->
             <div class="scan-card p-4 mb-4">
@@ -46,14 +46,13 @@
                         <i class="fas fa-folder-open me-2"></i>Browse Files
                     </label>
                     <input type="file" id="fileInput" class="d-none" accept="image/jpeg,image/png,image/jpg" multiple>
-                    <p class="text-muted small mt-3 mb-0">Maximum 10 images • JPG, PNG • Max 2MB each</p>
+                    <p class="text-muted small mt-3 mb-0">Maximum 5 images • JPG, PNG • Max 2MB each</p>
                 </div>
             </div>
 
-            <!-- Preview Section -->
-            <div id="previewSection" style="display: none;">
+            <div id="previewSection" class="mb-4" style="display: none;">
                 <h5 class="mb-3">Ảnh đã chọn: <span id="imageCount" class="badge bg-secondary">0 file(s)</span></h5>
-                <div class="preview-container" id="previewContainer"></div>
+                <div class="preview-container" id="previewContainer" class="row g-3"></div>
                 <div class="text-center mt-3">
                     <label for="providerSelect" class="form-label me-2">Chọn nhà cung cấp OCR:</label>
                     <select class="form-select d-inline-block w-auto me-2" id="providerSelect">
@@ -67,33 +66,23 @@
                 </div>
             </div>
 
-            <!-- Loading Section -->
-            <div id="loadingSection" class="text-center py-5" style="display: none;">
-                <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
-                    <span class="visually-hidden">Processing...</span>
-                </div>
-                <h5>Processing your images...</h5>
-                <p class="text-muted">This may take a few seconds</p>
+            <div id="loadingSection" class="text-center p-5" style="display: none;">
+                <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
+                <h5>Đang xử lý ảnh của bạn...</h5>
             </div>
 
             <div id="resultsSection" style="display: none;">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h5 class="mb-0">Văn bản đã trích xuất</h5>
-                    <div>
-                        <button class="btn btn-outline-primary btn-sm me-2" id="saveHistoryBtn">
-                            <i class="fas fa-save me-1"></i>Save to History
-                        </button>
-                        <button class="btn btn-outline-secondary btn-sm" id="scanAgainBtn">
-                            <i class="fas fa-redo me-1"></i>Quét lại
-                        </button>
-                    </div>
-
+                    <button class="btn btn-outline-secondary btn-sm" id="scanAgainBtn">
+                        <i class="fas fa-redo me-1"></i>Quét lại
+                    </button>
                 </div>
 
-                <div id="resultsContainer"></div>
+                <textarea id="combinedResultTextarea" class="form-control" rows="15" readonly></textarea>
 
-                <div id="exportSection" class="mt-4 p-3 border rounded" style="display: none;">
-                    <h5 class="mb-3">Tải xuống tất cả kết quả</h5>
+                <div id="exportSection" class="mt-4 p-3 border rounded">
+                    <h5 class="mb-3">Tải xuống kết quả</h5>
                     <div class="d-flex align-items-center gap-2">
                         <select class="form-select w-auto" id="exportFormatSelect">
                             <option value="txt">Text (.txt)</option>

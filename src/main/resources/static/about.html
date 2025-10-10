@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduScan - Smart OCR Solution</title>
+    <title>About Us - EduScan</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<script src="/js/scan.js"></script>
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="/index.html">
-            <img src="img/logo.png" alt="EduScan Logo" width="35" height="35" class="me-2">
+            <img  src="./img/logo.png"  alt="EduScan Logo" width="50" height="50" class="me-2">
             <span class="fw-bold">EduScan</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -22,65 +21,75 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="scan.html">Scan</a></li>
-                <li class="nav-item"><a class="nav-link" href="history.html">History</a></li>
-                <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/scan.html">Scan</a></li>
+                <li class="nav-item"><a class="nav-link" href="/history.html">History</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/about.html">About</a></li>
             </ul>
         </div>
     </div>
 </nav>
 
-<!-- Hero Section -->
-<section class="hero-section">
+<header class="page-header text-center text-white d-flex align-items-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Về EduScan</h1>
+        <p class="lead">Công cụ nhỏ - tiện ích lớn</p>
+    </div>
+</header>
+
+<section id="mission" class="py-5">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h1 class="display-4 fw-bold mb-4">Scan Photos → Read Text Quickly & Accurately</h1>
-                <p class="lead text-muted mb-4">Transform your images into editable text instantly with our advanced OCR technology powered by AI.</p>
-                <a href="scan.html" class="btn btn-primary btn-lg px-5 py-3">
-                    <i class="fas fa-camera me-2"></i>Start Scanning
-                </a>
+            <div class="col-md-6 text-center mb-4 mb-md-0">
+                <img src="https://source.unsplash.com/500x500/?education,technology" class="img-fluid rounded-circle shadow" alt="Our Mission">
             </div>
-            <div class="col-lg-6">
-                <div class="hero-image">
-                    <i class="fas fa-file-image"></i>
-                </div>
+            <div class="col-md-6">
+                <h2 class="fw-bold mb-3">Sứ mệnh của chúng tôi</h2>
+                <p class="text-muted">Trong kỷ nguyên số, việc chuyển đổi tài liệu giấy thành dữ liệu số là một nhu cầu thiết yếu. EduScan ra đời với sứ mệnh cung cấp một công cụ nhận dạng ký tự quang học (OCR) mạnh mẽ, linh hoạt và dễ sử dụng, đặc biệt phục vụ cho lĩnh vực giáo dục và nghiên cứu.</p>
+                <p class="text-muted">Chúng tôi tin rằng bằng cách tự động hóa quá trình nhập liệu, sinh viên, giáo viên và các nhà nghiên cứu có thể tiết kiệm thời gian quý báu, tập trung vào việc sáng tạo, phân tích và chia sẻ tri thức một cách hiệu quả hơn.</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Features Section -->
-<section class="features-section py-5">
+<section id="technology" class="py-5 bg-light">
     <div class="container">
-        <h2 class="text-center mb-5 fw-bold">Why Choose EduScan?</h2>
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="feature-card text-center p-4">
-                    <div class="feature-icon mb-3">
-                        <i class="fas fa-images"></i>
-                    </div>
-                    <h4 class="fw-bold">Multiple Image Upload</h4>
-                    <p class="text-muted">Upload up to 5 images at once and extract text from all of them simultaneously.</p>
+        <h2 class="text-center fw-bold mb-5">Công nghệ sử dụng</h2>
+        <div class="row text-center">
+            <div class="col-md-4 col-lg-2 col-6 mb-4">
+                <div class="tech-icon" title="Spring Boot">
+                    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/spring/spring-original.svg" alt="Spring Boot">
+                    <p>Spring Boot</p>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="feature-card text-center p-4">
-                    <div class="feature-icon mb-3">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <h4 class="fw-bold">Lightning Fast OCR</h4>
-                    <p class="text-muted">Get accurate text extraction in seconds with our AI-powered Gemini technology.</p>
+            <div class="col-md-4 col-lg-2 col-6 mb-4">
+                <div class="tech-icon" title="Java">
+                    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="Java">
+                    <p>Java</p>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="feature-card text-center p-4">
-                    <div class="feature-icon mb-3">
-                        <i class="fas fa-history"></i>
-                    </div>
-                    <h4 class="fw-bold">Save & Access History</h4>
-                    <p class="text-muted">All your scans are saved locally. Search, copy, and export your results anytime.</p>
+            <div class="col-md-4 col-lg-2 col-6 mb-4">
+                <div class="tech-icon" title="JavaScript">
+                    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="JavaScript">
+                    <p>JavaScript</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-2 col-6 mb-4">
+                <div class="tech-icon" title="HTML5">
+                    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original.svg" alt="HTML5">
+                    <p>HTML5</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-2 col-6 mb-4">
+                <div class="tech-icon" title="CSS3">
+                    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg" alt="CSS3">
+                    <p>CSS3</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-2 col-6 mb-4">
+                <div class="tech-icon" title="Bootstrap">
+                    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bootstrap/bootstrap-original.svg" alt="Bootstrap">
+                    <p>Bootstrap</p>
                 </div>
             </div>
         </div>
@@ -151,18 +160,13 @@
     </div>
 </section>
 
-<!-- Footer -->
 <footer class="footer py-4 bg-dark text-white">
     <div class="container text-center">
         <p class="mb-2">&copy; 2025 EduScan. All rights reserved.</p>
-        <p class="mb-0">
-            <a href="#" class="text-white me-3"><i class="fab fa-facebook"></i></a>
-            <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="text-white"><i class="fab fa-github"></i></a>
-        </p>
     </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
