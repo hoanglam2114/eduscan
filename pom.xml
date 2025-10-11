@@ -122,6 +122,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <finalName>web-eduscan</finalName>
     </build>
 
 </project>
