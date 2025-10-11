@@ -396,3 +396,104 @@ body {
 .tech-icon:hover {
     transform: scale(1.1);
 }
+
+/* Add these styles to your style.css */
+
+/* Upload Area */
+.upload-area {
+    border: 3px dashed #bfabce;
+    border-radius: 15px;
+    padding: 50px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(191, 171, 206, 0.05);
+}
+
+.upload-area:hover {
+    border-color: #9575a8;
+    background: rgba(191, 171, 206, 0.1);
+}
+
+.upload-area.drag-over {
+    border-color: #9575a8;
+    background: rgba(191, 171, 206, 0.2);
+    transform: scale(1.02);
+}
+
+.upload-area i {
+    font-size: 4rem;
+    color: #bfabce;
+}
+
+.upload-area h5 {
+    color: #6c757d;
+    margin-top: 1rem;
+}
+
+/* Preview Images - FIXED */
+.preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.preview-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.preview-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    border-radius: 8px;
+}
+
+/* Mobile responsive */
+@media (max-width: 576px) {
+    .preview-image {
+        height: 150px;
+    }
+
+    .upload-area {
+        padding: 30px 15px;
+    }
+
+    .upload-area i {
+        font-size: 3rem;
+    }
+}
+
+/* Scan card */
+.scan-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Loading section */
+#loadingSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+}
+
+/* Results textarea */
+#combinedResultTextarea {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: vertical;
+}
+
+/* Export section */
+#exportSection {
+    background: rgba(191, 171, 206, 0.05);
+    border-color: #bfabce !important;
+}

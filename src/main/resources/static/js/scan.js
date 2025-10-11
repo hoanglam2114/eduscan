@@ -1,8 +1,8 @@
-// --- Cấu hình ---
+// --- Configuration ---
 const MAX_FILES = 10;
 const API_BASE_URL = "/api";
 
-// --- Các đối tượng DOM ---
+// --- DOM Elements ---
 const fileInput = document.getElementById('fileInput');
 const uploadArea = document.getElementById('uploadArea');
 const previewSection = document.getElementById('previewSection');
@@ -13,7 +13,6 @@ const scanAgainBtn = document.getElementById('scanAgainBtn');
 const loadingSection = document.getElementById('loadingSection');
 const resultsSection = document.getElementById('resultsSection');
 const providerSelect = document.getElementById('providerSelect');
-// DOM cho kết quả và export
 const combinedResultTextarea = document.getElementById('combinedResultTextarea');
 const exportSection = document.getElementById('exportSection');
 const exportFormatSelect = document.getElementById('exportFormatSelect');
@@ -23,13 +22,41 @@ const exportBtn = document.getElementById('exportBtn');
 let selectedFiles = [];
 
 // --- Event Listeners ---
+// FIXED: Remove click event from uploadArea to prevent double trigger
 fileInput.addEventListener('change', handleFileSelect);
-uploadArea.addEventListener('click', () => fileInput.click());
+
+// FIXED: Only trigger file dialog when clicking the upload area itself, not the button
+uploadArea.addEventListener('click', (e) => {
+    // Don't trigger if clicking on the label/button
+    if (e.target.tagName !== 'LABEL' && e.target.tagName !== 'BUTTON') {
+        fileInput.click();
+    }
+});
+
+// Drag and drop support
+uploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.classList.add('drag-over');
+});
+
+uploadArea.addEventListener('dragleave', () => {
+    uploadArea.classList.remove('drag-over');
+});
+
+uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove('drag-over');
+    const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+    if (files.length > 0) {
+        handleDroppedFiles(files);
+    }
+});
+
 scanBtn.addEventListener('click', performOCR);
 scanAgainBtn.addEventListener('click', resetScan);
 exportBtn.addEventListener('click', handleCombinedExport);
 
-// --- Các hàm xử lý ---
+// --- Functions ---
 
 function handleFileSelect(event) {
     const files = Array.from(event.target.files);
@@ -41,16 +68,47 @@ function handleFileSelect(event) {
     updatePreview();
 }
 
+function handleDroppedFiles(files) {
+    if (files.length > MAX_FILES) {
+        alert(`Bạn chỉ có thể chọn tối đa ${MAX_FILES} file.`);
+        return;
+    }
+    selectedFiles = files;
+    // Update the file input to match
+    const dataTransfer = new DataTransfer();
+    files.forEach(file => dataTransfer.items.add(file));
+    fileInput.files = dataTransfer.files;
+    updatePreview();
+}
+
 function updatePreview() {
     previewContainer.innerHTML = '';
     if (selectedFiles.length > 0) {
-        selectedFiles.forEach(file => {
+        selectedFiles.forEach((file, index) => {
             const reader = new FileReader();
             reader.onload = (e) => {
+                // FIXED: Add proper structure for preview images
+                const col = document.createElement('div');
+                col.className = 'col-6 col-md-4 col-lg-3';
+
+                const imgWrapper = document.createElement('div');
+                imgWrapper.className = 'preview-image-wrapper position-relative';
+
                 const img = document.createElement('img');
                 img.src = e.target.result;
-                img.className = 'preview-image';
-                previewContainer.appendChild(img);
+                img.className = 'preview-image img-fluid rounded';
+                img.alt = file.name;
+
+                // Add remove button
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'btn btn-danger btn-sm position-absolute top-0 end-0 m-1';
+                removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                removeBtn.onclick = () => removeImage(index);
+
+                imgWrapper.appendChild(img);
+                imgWrapper.appendChild(removeBtn);
+                col.appendChild(imgWrapper);
+                previewContainer.appendChild(col);
             };
             reader.readAsDataURL(file);
         });
@@ -61,6 +119,11 @@ function updatePreview() {
         previewSection.style.display = 'none';
         scanBtn.disabled = true;
     }
+}
+
+function removeImage(index) {
+    selectedFiles = selectedFiles.filter((_, i) => i !== index);
+    updatePreview();
 }
 
 async function performOCR() {
@@ -97,7 +160,6 @@ async function performOCR() {
 function displayResults(results) {
     const hasSuccessfulResults = results.some(r => r.text);
 
-    // Gộp tất cả text vào một chuỗi
     const combinedText = results
         .map(result => {
             if (result.text) {
@@ -108,18 +170,13 @@ function displayResults(results) {
         })
         .join("\n" + "=".repeat(50) + "\n");
 
-    // Hiển thị chuỗi đã gộp trong textarea
     combinedResultTextarea.value = combinedText;
-
     resultsSection.style.display = 'block';
-    // Chỉ hiển thị khu vực export nếu có ít nhất 1 kết quả thành công
     exportSection.style.display = hasSuccessfulResults ? 'block' : 'none';
 }
 
-// Hàm xử lý download tổng hợp
 async function handleCombinedExport() {
     const format = exportFormatSelect.value;
-    // Lấy nội dung trực tiếp từ textarea
     const textToExport = combinedResultTextarea.value;
 
     if (!textToExport.trim()) {
@@ -149,7 +206,6 @@ async function handleCombinedExport() {
     }
 }
 
-// Hàm gọi API để export (không đổi)
 async function exportFile(text, format) {
     const response = await fetch(`${API_BASE_URL}/export?format=${format}`, {
         method: 'POST',

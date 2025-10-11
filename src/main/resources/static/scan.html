@@ -37,16 +37,24 @@
 
 
             <!-- Upload Section -->
+            <!-- Replace your upload section with this -->
             <div class="scan-card p-4 mb-4">
                 <div class="upload-area" id="uploadArea">
                     <i class="fas fa-cloud-upload-alt mb-3"></i>
                     <h5>Drag & Drop Images Here</h5>
                     <p class="text-muted mb-3">or</p>
-                    <label for="fileInput" class="btn btn-primary">
+                    <label for="fileInput" class="btn btn-primary" onclick="event.stopPropagation();">
                         <i class="fas fa-folder-open me-2"></i>Browse Files
                     </label>
-                    <input type="file" id="fileInput" class="d-none" accept="image/jpeg,image/png,image/jpg" multiple>
-                    <p class="text-muted small mt-3 mb-0">Maximum 5 images • JPG, PNG • Max 2MB each</p>
+                    <!-- FIXED: Added capture attribute for mobile camera -->
+                    <input
+                            type="file"
+                            id="fileInput"
+                            class="d-none"
+                            accept="image/jpeg,image/png,image/jpg,image/webp,image/heic"
+                            capture="environment"
+                            multiple>
+                    <p class="text-muted small mt-3 mb-0">Maximum 5 images • JPG, PNG • Max 5MB each</p>
                 </div>
             </div>
 
@@ -61,7 +69,7 @@
                         <option value="vision">Google Vision</option>
                     </select>
                     <button class="btn btn-primary btn-lg" id="scanBtn" disabled>
-                        <i class="fas fa-camera me-2"></i>Thực hiện OCR
+                        <i class="fas fa-camera me-2"></i>Phân tích
                     </button>
                 </div>
             </div>
