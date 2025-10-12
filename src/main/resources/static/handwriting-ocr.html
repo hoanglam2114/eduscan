@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edu Scan - Nhận dạng chữ viết tay</title>
+    <link rel="stylesheet" href="css/style.css">
+     <link rel="stylesheet" href="css/handwriting-ocr.css">
+</head>
+<body>
+    <div class="animated-background">
+        <div class="gradient-overlay"></div>
+    </div>
+
+    <div class="handwriting-ocr-container">
+        <header class="ocr-header">
+            <button class="back-button" onclick="history.back()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                Quay lại
+            </button>
+            <div class="header-title">
+                <div class="title-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M14 2V8H20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 13H8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 17H8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M10 9H8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                </div>
+                <div>
+                    <h1>Nhận dạng chữ viết tay</h1>
+                    <p>Tải lên ảnh chứa chữ viết tay để bắt đầu</p>
+                </div>
+            </div>
+        </header>
+
+        <main class="ocr-main-content">
+            <div class="ocr-container">
+                <section class="upload-section">
+                    <div id="upload-view">
+                        <input type="file" id="file-input" accept="image/*" style="display: none;" />
+                        <div id="upload-area" class="upload-area">
+                            <div class="upload-content">
+                                <div class="upload-icon">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="#667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M17 8L12 3L7 8" stroke="#667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 3V15" stroke="#667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                </div>
+                                <h3>Kéo và thả ảnh vào đây</h3>
+                                <p>hoặc</p>
+                                <button id="browse-button" class="browse-button">Chọn ảnh từ thiết bị</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="preview-view" class="preview-area" style="display: none;">
+                        <img id="image-preview" src="" alt="Xem trước ảnh" class="image-preview" />
+                        <div class="preview-actions">
+                            <button id="process-button" class="action-button primary">
+                                <span id="process-button-text">Xử lý ảnh</span>
+                            </button>
+                            <button id="clear-button" class="action-button secondary">Chọn ảnh khác</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="results-section">
+                    <div class="result-header">
+                        <h2>Kết quả trích xuất</h2>
+                        <div class="result-actions">
+                            <button id="copy-button" class="action-btn">Sao chép</button>
+                            <button id="export-word-button" class="action-btn">Xuất Word</button>
+                            <button id="export-excel-button" class="action-btn">Xuất Excel</button>
+                        </div>
+                    </div>
+                    
+                    <div id="processing-view" class="processing-animation" style="display: none;">
+                        <div class="processing-spinner"><div class="spinner-ring"></div></div>
+                        <p>AI đang phân tích ảnh của bạn...</p>
+                    </div>
+
+                    <div id="result-display-view">
+                        <textarea id="result-textarea" class="result-textarea" placeholder="Kết quả OCR sẽ hiển thị ở đây..." rows="12"></textarea>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://unpkg.com/docx@7.3.0/build/index.js"></script>
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+
+    <script src="js/usageLimiter.js"></script>
+    <script src="js/handwriting-ocr.js"></script>
+  <script src="../js/background.js"></script>
+<!--    <script src="js/usageLimiter.js"></script>-->
+
+
+</body>
+</html>
