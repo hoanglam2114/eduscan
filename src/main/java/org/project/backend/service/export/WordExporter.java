@@ -17,10 +17,17 @@ public class WordExporter implements FileExporter {
         try (XWPFDocument document = new XWPFDocument();
              ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
-            // Tạo một đoạn văn bản (paragraph)
-            XWPFParagraph paragraph = document.createParagraph();
-            XWPFRun run = paragraph.createRun();
-            run.setText(content);
+            // SỬA LỖI: Tách chuỗi thành các dòng riêng biệt
+            String[] lines = content.split("\\r?\\n");
+            for (String line : lines) {
+                XWPFParagraph paragraph = document.createParagraph();
+                XWPFRun run = paragraph.createRun();
+                run.setText(line);
+            }
+//            // Tạo một đoạn văn bản (paragraph)
+//            XWPFParagraph paragraph = document.createParagraph();
+//            XWPFRun run = paragraph.createRun();
+//            run.setText(content);
 
             // Ghi document vào một ByteArrayOutputStream
             document.write(out);
@@ -41,6 +48,6 @@ public class WordExporter implements FileExporter {
 
     @Override
     public String getFormatName() {
-        return "word";
+        return "docx";
     }
 }
