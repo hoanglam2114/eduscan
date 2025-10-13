@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorMessageElement = document.getElementById('error-message');
 
     // API Endpoint của backend
-    const API_URL = 'http://localhost:8080/api/auth/login';
+    const API_URL = 'api/auth/login';
 
     const handleSubmit = async (event) => {
         event.preventDefault();

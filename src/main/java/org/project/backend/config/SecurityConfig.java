@@ -39,24 +39,23 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.csrf(csrf -> csrf.disable())
+        http.cors(cors -> cors.disable())  // Let WebConfig handle CORS
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authorize) ->
                         authorize
                                 .requestMatchers(
-                                        "/",                // Cho phép trang gốc
-                                        "/*.html",      // Cho phép trang chủ
-                                        "/login.html",      // Cho phép trang đăng nhập
-                                        "/signup.html",     // Cho phép trang đăng ký
-                                        "/handwriting-ocr.html", // Cho phép trang chức năng
-                                        "/camera.html",     // Cho phép trang chức năng
-                                        "/css/**",          // Cho phép tất cả file CSS
-                                        "/js/**",         // Cho phép tất cả file JS
-                                        "/images/**",       // Cho phép tất cả file ảnh
+                                        "/",
+                                        "/*.html",
+                                        "/login.html",
+                                        "/signup.html",
+                                        "/handwriting-ocr.html",
+                                        "/camera.html",
+                                        "/css/**",
+                                        "/js/**",
+                                        "/images/**",
                                         "/favicon.ico",
-                                        "/api/auth/**"      // Cho phép API đăng nhập/đăng ký                       ).permitAll()
-                                // -------------------------
+                                        "/api/auth/**"
                                 ).permitAll()
-                                // Tất cả các request còn lại (ví dụ /api/upload) phải xác thực
                                 .anyRequest().authenticated()
                 ).exceptionHandling( exception -> exception
                         .authenticationEntryPoint(authenticationEntryPoint)
