@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Thanh toán thành công</title>
+    <style>
+        body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; margin:0; padding:24px; background:#f6fffb; color:#042a1b }
+        .card { background:white; border-radius:12px; padding:32px; box-shadow:0 6px 20px rgba(0,0,0,0.06); max-width:720px; margin:20px auto }
+        h1 { margin:0 0 24px 0; color:#06313b; font-size:32px }
+        .info-row { display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #e5e7eb }
+        .info-row:last-of-type { border-bottom:none }
+        .label { color:#6b7280; font-size:14px }
+        .value { font-weight:600; color:#0f172a }
+        .tx { color:#065f46; font-weight:700; font-size:16px }
+        a { color:#065f46; text-decoration:none; font-weight:500 }
+        a:hover { text-decoration:underline }
+        .success-icon { font-size:48px; text-align:center; margin-bottom:16px }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="success-icon">🎉</div>
+    <h1 style="text-align:center">Thanh toán thành công!</h1>
+    <p style="text-align:center; color:#6b7280; margin-bottom:32px">Cảm ơn bạn đã tin tưởng sử dụng dịch vụ của chúng tôi.</p>
+
+    <div class="info-row">
+        <span class="label">Mã giao dịch</span>
+        <span class="tx" id="tx">-</span>
+    </div>
+    <div class="info-row">
+        <span class="label">Gói dịch vụ</span>
+        <span class="value" id="plan">-</span>
+    </div>
+    <div class="info-row">
+        <span class="label">Email</span>
+        <span class="value" id="email">-</span>
+    </div>
+
+    <p style="margin-top:32px; text-align:center">
+        <a href="plans.html">← Quay về danh sách gói</a> &nbsp;|&nbsp;
+        <a href="./">Về trang chính</a>
+    </p>
+</div>
+
+<script>
+    const q = Object.fromEntries(new URLSearchParams(location.search));
+    document.getElementById('tx').textContent = q.tx || '-';
+    document.getElementById('plan').textContent = q.plan || '-';
+    document.getElementById('email').textContent = q.email || '-';
+</script>
+</body>
+</html>

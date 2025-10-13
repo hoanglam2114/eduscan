@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>EduScan - Payment</title>
+    <style>
+        :root {
+            --left-bg: #07070a;
+            --left-contrast: #0b0b0f
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+            background: #fff
+        }
+
+        .checkout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .left {
+            flex: 1;
+            background: linear-gradient(180deg, var(--left-bg), #0f1724);
+            color: #fff;
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start
+        }
+
+        .summary {
+            max-width: 520px;
+            width: 100%
+        }
+
+        .price {
+            font-size: 42px;
+            font-weight: 700;
+            margin: 12px 0
+        }
+
+        .plan-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 18px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            margin: 18px 0
+        }
+
+        .muted {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px
+        }
+
+        .right {
+            width: 520px;
+            background: #fff;
+            padding: 40px;
+            border-left: 1px solid #eef2ff
+        }
+
+        .qr-section {
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .qr-container {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 12px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .qr-container img {
+            width: 220px;
+            height: 220px;
+            display: block;
+        }
+
+        .bank-info {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 12px 0;
+            text-align: left;
+        }
+
+        .bank-info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .bank-info-item:last-child {
+            border-bottom: none
+        }
+
+        .bank-info-label {
+            color: #64748b;
+            font-size: 14px
+        }
+
+        .bank-info-value {
+            font-weight: 600;
+            color: #0f172a
+        }
+
+        .transaction-input {
+            margin: 20px 0;
+        }
+
+        .transaction-input input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        .transaction-input input:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+
+        .confirm-btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: #10b981;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 18px;
+            transition: background 0.2s;
+        }
+
+        .confirm-btn:hover {
+            background: #059669
+        }
+
+        .confirm-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #94a3b8
+        }
+
+        .small {
+            font-size: 13px;
+            color: #6b7280
+        }
+
+        .error {
+            color: #dc2626;
+            margin-top: 8px;
+            font-size: 14px;
+            background: #fee;
+            padding: 12px;
+            border-radius: 6px;
+            display: none
+        }
+
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 16px 0;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .step-number {
+            background: #6366f1;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        @media (max-width: 920px) {
+            .checkout {
+                flex-direction: column
+            }
+
+            .right {
+                width: 100%;
+                border-left: none
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="checkout">
+    <div class="left">
+        <div class="summary">
+            <div style="display:flex;align-items:center;gap:12px">
+                <div style="width:48px;height:48px;background:#0b0b0f;border-radius:8px;display:flex;align-items:center;justify-content:center">
+                    📦
+                </div>
+                <div class="muted">Subscribe to EduScan Pro</div>
+            </div>
+            <div class="price"><span id="displayPrice">0</span> <span class="muted" style="font-size:14px">VND</span>
+            </div>
+
+            <div class="plan-card">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                    <div>
+                        <div style="font-weight:700" id="planName">-</div>
+                        <div class="small muted" id="planDesc">-</div>
+                    </div>
+                    <div style="font-weight:700" id="planPrice">0 VND</div>
+                </div>
+            </div>
+
+            <div class="muted">Subtotal <span style="float:right" id="subtotal">0 VND</span></div>
+            <div class="muted">Tax <span style="float:right">0 VND</span></div>
+            <div style="height:12px"></div>
+            <div style="font-weight:700">Total due today <span style="float:right" id="total">0 VND</span></div>
+        </div>
+    </div>
+
+    <div class="right">
+        <h2 style="margin:0 0 12px 0">Thanh toán</h2>
+        <div style="margin-bottom:12px">
+            <a href="plans.html"
+               style="text-decoration:none;color:#374151;border:1px solid #eef2ff;padding:8px 10px;border-radius:8px;display:inline-block">←
+                Back to plans</a>
+        </div>
+
+        <div class="step-indicator">
+            <span class="step-number">1</span>
+            <span>Quét mã QR để chuyển khoản</span>
+        </div>
+
+        <div class="qr-section">
+            <h3 style="margin:0 0 8px 0;color:#0f172a">Quét mã QR thanh toán</h3>
+            <p class="small" style="margin:0 0 12px 0">Sử dụng ứng dụng ngân hàng để quét mã</p>
+
+            <div class="qr-container">
+                <img src="images/qrbank.png" alt="QR Code" id="qrCodeImage"/>
+            </div>
+
+            <div class="bank-info">
+                <div class="bank-info-item">
+                    <span class="bank-info-label">Ngân hàng</span>
+                    <span class="bank-info-value">MBBank</span>
+                </div>
+                <div class="bank-info-item">
+                    <span class="bank-info-label">Số tài khoản</span>
+                    <span class="bank-info-value">556602112004</span>
+                </div>
+                <div class="bank-info-item">
+                    <span class="bank-info-label">Chủ tài khoản</span>
+                    <span class="bank-info-value">DOAN HOANG LAM</span>
+                </div>
+                <div class="bank-info-item">
+                    <span class="bank-info-label">Số tiền</span>
+                    <span class="bank-info-value" id="amountDisplay">0 VND</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="step-indicator">
+            <span class="step-number">2</span>
+            <span>Nhập mã giao dịch từ ngân hàng</span>
+        </div>
+
+        <div class="transaction-input">
+            <input
+                    type="text"
+                    id="transactionCode"
+                    placeholder="Nhập mã giao dịch (VD: FT23123456789)"
+                    maxlength="50"
+            />
+            <p class="small" style="margin:8px 0 0 0">Mã giao dịch có thể tìm thấy trong lịch sử giao dịch ngân hàng của bạn</p>
+        </div>
+
+        <button id="confirmBtn" class="confirm-btn">✓ Tôi đã chuyển khoản</button>
+
+        <div class="error" id="error"></div>
+
+        <p class="small" style="margin-top:16px;text-align:center">
+            Sau khi xác nhận, gói dịch vụ sẽ được kích hoạt ngay lập tức và bạn sẽ nhận được email xác nhận.
+        </p>
+    </div>
+</div>
+
+<script>
+    const API_BASE = 'http://localhost:8080/api';
+    const params = new URLSearchParams(window.location.search);
+    const planId = params.get('planId');
+    const planType = params.get('plan');
+
+    let selectedPlan = null;
+    const token = localStorage.getItem('authToken') || 'demo-token';
+
+    function parseJwt(token) {
+        try {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        } catch (e) {
+            return { sub: 'user@example.com' };
+        }
+    }
+
+    async function loadPlan() {
+        try {
+            let pId = planId || (planType === 'month' ? 1 : planType === 'year' ? 2 : 1);
+
+            const response = await fetch(`${API_BASE}/plans/${pId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (!response.ok) throw new Error('Failed to load plan');
+
+            selectedPlan = await response.json();
+
+            const priceFormatted = selectedPlan.price.toLocaleString('vi-VN');
+            document.getElementById('planName').textContent = selectedPlan.name;
+            document.getElementById('planDesc').textContent = selectedPlan.description || 'Premium features';
+            document.getElementById('planPrice').textContent = priceFormatted + ' VND';
+            document.getElementById('displayPrice').textContent = priceFormatted;
+            document.getElementById('subtotal').textContent = priceFormatted + ' VND';
+            document.getElementById('total').textContent = priceFormatted + ' VND';
+            document.getElementById('amountDisplay').textContent = priceFormatted + ' VND';
+        } catch (error) {
+            console.error('Error loading plan:', error);
+        }
+    }
+
+    document.getElementById('confirmBtn').addEventListener('click', () => {
+        const transactionCode = document.getElementById('transactionCode').value?.trim();
+        if (!transactionCode) {
+            showError('Vui lòng nhập mã giao dịch');
+            return;
+        }
+        if (!selectedPlan) {
+            showError('Thông tin gói chưa được tải');
+            return;
+        }
+
+        const payload = parseJwt(token);
+        const email = payload.sub || 'user@example.com';
+
+        window.location.href = `payment-success.html?tx=${encodeURIComponent(transactionCode)}&plan=${encodeURIComponent(selectedPlan.name)}&email=${encodeURIComponent(email)}`;
+    });
+
+    function showError(message) {
+        const e = document.getElementById('error');
+        e.textContent = message;
+        e.style.display = 'block';
+    }
+
+    loadPlan();
+</script>
+
+</body>
+</html>

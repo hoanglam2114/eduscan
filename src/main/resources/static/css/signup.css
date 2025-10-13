@@ -1,0 +1,121 @@
+/* SignUp Container */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+.signup-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  position: relative;
+}
+
+.signup-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 36px 36px 56px 36px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+}
+
+/* Header */
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  padding: 16px;
+  background: rgba(243, 244, 255, 0.8);
+  border-radius: 14px;
+}
+
+.header-title .animated-text {
+  font-size: 22px;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.header-title span:not(.animated-text) {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* Form */
+.signup-form {
+  width: 100%;
+}
+
+.input-group.underline { margin-bottom: 18px; }
+
+.small-label {
+  font-size: 12px;
+  color: #4f9bf7;
+  margin-bottom: 6px;
+  display: block;
+  font-weight: 600;
+}
+
+.underline-input {
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #cfe9ff;
+  padding: 10px 44px 10px 6px;
+  font-size: 16px;
+  outline: none;
+  font-weight: 600;
+  color: #0f172a;
+  background: transparent;
+}
+
+.password-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 2px solid #cfe9ff;
+}
+
+.password-row input {
+  border-bottom: none;
+  padding-right: 6px;
+}
+
+.signup-button.pill {
+  width: 100%;
+  padding: 16px;
+  border-radius: 99px;
+  background: linear-gradient(135deg, #4f7cff 0%, #7c3aed 100%);
+  color: white;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 24px;
+  box-shadow: 0 8px 20px rgba(79, 124, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.signup-button.pill:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px rgba(79, 124, 255, 0.4);
+}
+
+.login-link {
+  margin-top: 24px;
+}
+
+.centered { text-align: center; }
+
+.link-button {
+  background: none;
+  border: none;
+  color: #667eea;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}

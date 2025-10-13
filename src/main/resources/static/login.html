@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDUSCAN - Login</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+<div class="animated-background">
+  <div class="gradient-overlay"></div>
+  <div class="waves">
+    <div class="wave wave-1"></div>
+    <div class="wave wave-2"></div>
+  </div>
+</div>
+<div class="animated-background">
+  <div class="gradient-overlay"></div>
+</div>
+
+<div class="login-container">
+  <div class="login-card">
+    <div class="header-title">
+        <span class="header-small-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#7c3aed" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 17L12 22L22 17" stroke="#7c3aed" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 12L12 17L22 12" stroke="#7c3aed" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </span>
+        <h2>EDUSCAN</h2>
+        <p class="app-subtitle">OCR & Document Scanner</p>
+    </div>
+
+    <form id="loginForm" class="login-form">
+      <h2 class="login-title">LOGIN</h2>
+
+      <div class="input-group">
+        <label for="email">Email</label>
+        <input type="email"
+               id="email"
+               class="underline-input"
+               placeholder="example@email.com"
+               value=""
+               required>
+      </div>
+
+      <div class="input-group underline password-row">
+        <div style="flex: 1;">
+          <label class="small-label">Password</label>
+          <input
+                  type="password"
+                  id="password"
+                  class="underline-input"
+                  placeholder=""
+                  required
+          />
+        </div>
+        <span class="password-help" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17 11V8a5 5 0 0 0-10 0v3" stroke="#7c3aed" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              <rect x="3" y="11" width="18" height="9" rx="2" stroke="#7c3aed" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+      </div>
+
+      <p id="error-message" class="error-message"></p>
+
+      <div class="forgot-row">
+        <button type="button" class="forgot-link" id="forgotPasswordBtn">
+          Forget your password
+        </button>
+      </div>
+
+      <button type="submit" class="login-button">LOGIN</button>
+
+      <p class="signup-link">
+        Don't have an account?
+        <button type="button" class="switch-link" id="signupBtn">
+          Signup →
+        </button>
+      </p>
+    </form>
+  </div>
+</div>
+
+<script src="js/login.js"></script>
+<script src="../js/background.js"></script>
+
+</body>
+</html>

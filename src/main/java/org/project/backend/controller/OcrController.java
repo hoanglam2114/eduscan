@@ -5,34 +5,58 @@ import org.project.backend.model.OcrResponse;
 import org.project.backend.model.OcrResult;
 import org.project.backend.service.ExportService;
 import org.project.backend.service.OcrService;
+import org.project.backend.service.UsageLimitingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
-@CrossOrigin
+import org.project.backend.service.UsageLimitingService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/api")
 public class OcrController {
 
     private static final Logger log = LoggerFactory.getLogger(OcrController.class);
 
-
+    private final UsageLimitingService usageLimitingService;
     private final OcrService ocrService;
     private final ExportService exportService;
 
-    public OcrController(OcrService ocrService, ExportService exportService) {
+    public OcrController(OcrService ocrService, ExportService exportService,UsageLimitingService usageLimitingService) {
         this.ocrService = ocrService;
         this.exportService = exportService;
+        this.usageLimitingService = usageLimitingService; // Inject service mới
     }
 
     @PostMapping("/upload")
     public ResponseEntity<?> uploadAndExtract(
             @RequestParam("files") MultipartFile[] files,
-            @RequestParam(value = "provider", defaultValue = "gemini") String provider) {
+            @RequestParam(value = "provider", defaultValue = "gemini") String provider,
+    HttpServletRequest request)
+        { // Thêm HttpServletRequest
+            // --- BẮT ĐẦU LOGIC GIỚI HẠN ---
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            // Kiểm tra nếu người dùng chưa đăng nhập (anonymous)
+            if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
+                String clientIp = usageLimitingService.getClientIp(request);
+                if (!usageLimitingService.isAllowed(clientIp)) {
+                    // Trả về lỗi 429 nếu vượt quá giới hạn
+                    return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                            .body("Bạn đã hết số lần sử dụng miễn phí. Vui lòng đăng nhập để tiếp tục.");
+                }
+            }
+
+        // --- KẾT THÚC LOGIC GIỚI HẠN ---
 
         if (files.length > 10) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Chỉ được phép upload tối đa 10 file.");
@@ -57,9 +81,16 @@ public class OcrController {
             ExportResult exportResult = exportService.export(result.getText(), format);
             return ResponseEntity.ok()
                     .contentType(exportResult.getMediaType())
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + exportResult.getFileName() + "\"")
+//                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + exportResult.getFileName() + "\"")
+                    .header(HttpHeaders.CONTENT_DISPOSITION)
                     .body(exportResult.getData());
+
+        } catch (IllegalArgumentException e) {
+            log.error("EXPORT FAILED - UNSUPPORTED FORMAT: {}", format, e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
         } catch (Exception e) {
+            log.error("EXPORT FAILED: ", e);
             return ResponseEntity.badRequest().body(null);
         }
     }
