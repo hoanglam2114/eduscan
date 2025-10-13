@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EduScan - Plans</title>
+    <style>
+        body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; margin:0; padding:24px; background:#f6f8fb; color:#111827 }
+        .card { background:white; border-radius:12px; padding:20px; box-shadow:0 6px 20px rgba(0,0,0,0.06); max-width:1000px; margin:20px auto }
+        h1 { margin:0 0 12px 0; color:#374151 }
+        .plans { display:flex; gap:12px; flex-wrap:wrap }
+        .plan { flex:1 1 260px; background:linear-gradient(180deg,#fff,#fbfbff); border-radius:10px; padding:16px; border:1px solid #eef2ff }
+        .plan h3 { margin:0 0 8px 0; font-size:18px }
+        .price { font-size:24px; font-weight:700; color:#0f172a; margin:8px 0 }
+        .desc { font-size:14px; color:#6b7280; margin:8px 0 16px 0 }
+        .cta { margin-top:16px; display:flex; gap:8px }
+        a.btn {
+            display:inline-block;
+            flex:1;
+            text-align:center;
+            padding:10px 14px;
+            border-radius:8px;
+            text-decoration:none;
+            color:white;
+            background:#6366f1;
+            transition:background 0.2s;
+        }
+        a.btn:hover { background:#4f46e5 }
+        a.ghost {
+            background:transparent;
+            color:#374151;
+            border:1px solid #e5e7eb;
+            cursor:pointer;
+        }
+        a.ghost:hover { background:#f3f4f6 }
+        .badge { background:#dbeafe; color:#1e40af; padding:4px 8px; border-radius:6px; font-weight:700; font-size:12px }
+        footer { text-align:center; margin-top:20px; color:#6b7280 }
+        .loading { text-align:center; padding:40px; color:#6b7280 }
+        .error { color:#dc2626; text-align:center; padding:20px; background:#fee; border-radius:8px }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>Gói dịch vụ EduScan</h1>
+    <p>Chọn gói phù hợp. Bạn có thể dùng thử miễn phí 1 tháng.</p>
+
+    <div id="plansContainer" class="plans">
+        <div class="loading">Loading plans...</div>
+    </div>
+
+    <footer>
+        <small>Demo page - Real payment via VNPAY</small>
+    </footer>
+</div>
+
+<script>
+    const API_BASE = 'http://localhost:8080/api';
+
+    async function loadPlans() {
+        try {
+            const response = await fetch(`${API_BASE}/plans`);
+            if (!response.ok) throw new Error('Failed to load plans');
+
+            const plans = await response.json();
+            const container = document.getElementById('plansContainer');
+            container.innerHTML = '';
+
+            plans.forEach(plan => {
+                const planDiv = document.createElement('div');
+                planDiv.className = 'plan';
+                planDiv.innerHTML = `
+                    <h3>${plan.name}</h3>
+                    <div class="price">₫${plan.price?.toLocaleString()}</div>
+                    <p class="desc">${plan.description || 'Premium features included'}</p>
+                    <div style="font-size:13px;color:#6b7280;margin:8px 0">
+                        <strong>Limit:</strong> ${plan.scanLimitPerMonth} scans/month
+                    </div>
+                    <div class="cta">
+                        <a class="btn" href="payment.html?planId=${plan.id}">Thanh toán</a>
+                    </div>
+                `;
+                container.appendChild(planDiv);
+            });
+
+        } catch (error) {
+            console.error('Error loading plans:', error);
+            document.getElementById('plansContainer').innerHTML = `
+                <div class="error">
+                    <strong>Failed to load plans</strong><br>
+                    ${error.message}<br>
+                    <small>Make sure backend is running on port 8080</small>
+                </div>
+            `;
+        }
+    }
+
+    // Load plans on page load
+    loadPlans();
+</script>
+</body>
+</html>

@@ -8,56 +8,89 @@
     <link rel="stylesheet" href="css/index.css">
 </head>
 <body class="main-app">
-    <div class="animated-background">
-        <div class="gradient-overlay"></div>
+<div class="animated-background">
+    <div class="gradient-overlay"></div>
+</div>
+
+<header class="app-header">
+    <div class="header-content">
+        <div class="logo-section">
+            <img src="images/1.png" alt="Edu Scan Logo" class="logo-image" height="70px" width="70px">
+            <h1 style="color: #cfe9ff">Edu Scan</h1>
+        </div>
+
+        <div id="user-section" class="user-section">
+        </div>
+
+    </div>
+</header>
+
+<main class="container">
+    <h2 class="main-title">Chọn chức năng chính</h2>
+    <div class="button-grid">
+        <a href="handwriting-ocr.html" class="menu-btn">
+            <div class="btn-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z" stroke="currentColor"
+                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M14 2v6h6m-4 5H8m8 4H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                          stroke-linejoin="round"></path>
+                </svg>
+            </div>
+            <div class="btn-content">
+                <h3>Nhận dạng chữ viết tay</h3>
+                <p>Tải ảnh lên để quét và trích xuất chữ viết tay</p>
+            </div>
+        </a>
+
+        <a href="camera.html" class="menu-btn">
+            <div class="btn-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <circle cx="12" cy="13" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round"></circle>
+                </svg>
+            </div>
+            <div class="btn-content">
+                <h3>Chụp ảnh văn bản</h3>
+                <p>Sử dụng camera để chụp và trích xuất văn bản</p>
+            </div>
+        </a>
     </div>
 
-    <header class="app-header">
-        <div class="header-content">
-            <div class="logo-section">
-<!--                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">-->
-<!--                    <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">-->
-<!--                    </path>-->
-<!--                    <path d="M2 17l10 5 10-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>-->
-<!--                    <path d="M2 12l10 5 10-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>-->
-<!--                </svg>-->
-                <img src="images/1.png" alt="Edu Scan Logo" class="logo-image" height="70px" width="70px">
-                <h1 style="color: #cfe9ff">Edu Scan</h1>
-            </div>
+    <section style="margin-top: 60px; text-align: center;">
+        <h2 style="font-size: 28px; margin-bottom: 20px; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+            Nâng tầm trải nghiệm của bạn
+        </h2>
+        <a href="plans.html" style="display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 50px; font-weight: 600; font-size: 18px; box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4); transition: all 0.3s ease; position: relative; overflow: hidden;">
+            <span style="position: relative; z-index: 1;">✨ Nâng cấp gói</span>
+        </a>
+    </section>
+    <style>
+        .update-button a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(102, 126, 234, 0.6) !important;
+        }
 
-            <div id="user-section" class="user-section">
-<!--                <span id="user-greeting">Chào mừng bạn!</span>-->
-<!--                <a id="logout-button" class="logout-btn" href="login.html">Đăng xuất</a>-->
-            </div>
-        </div>
-    </header>
+        .update-button a:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
 
-    <main class="container">
-        <h2 class="main-title">Chọn chức năng chính</h2>
-        <div class="button-grid">
-            <a href="handwriting-ocr.html" class="menu-btn">
-                <div class="btn-icon">
-                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M14 2v6h6m-4 5H8m8 4H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                </div>
-                <div class="btn-content">
-                    <h3>Nhận dạng chữ viết tay</h3>
-                    <p>Tải ảnh lên để quét và trích xuất chữ viết tay</p>
-                </div>
-            </a>
+        .update-button a:hover:before {
+            left: 100%;
+        }
+    </style>
+</main>
 
-            <a href="camera.html" class="menu-btn">
-                 <div class="btn-icon">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="12" cy="13" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></circle></svg>
-                </div>
-                <div class="btn-content">
-                    <h3>Chụp ảnh văn bản</h3>
-                    <p>Sử dụng camera để chụp và trích xuất văn bản</p>
-                </div>
-            </a>
-        </div>
-    </main>
-
-    <script src="../js/background.js"></script>
-    <script src="js/index.js"></script>
+<script src="js/background.js"></script>
+<script src="js/index.js"></script>
 </body>
 </html>

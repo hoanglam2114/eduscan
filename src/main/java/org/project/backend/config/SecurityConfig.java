@@ -21,13 +21,13 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
     private final JwtAuthenticationFilter authenticationFilter;
 
-    public SecurityConfig(JwtAuthenticationEntryPoint authenticationEntryPoint, JwtAuthenticationFilter authenticationFilter){
+    public SecurityConfig(JwtAuthenticationEntryPoint authenticationEntryPoint, JwtAuthenticationFilter authenticationFilter) {
         this.authenticationEntryPoint = authenticationEntryPoint;
         this.authenticationFilter = authenticationFilter;
     }
 
     @Bean
-    public static PasswordEncoder passwordEncoder(){
+    public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -43,8 +43,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authorize) ->
                         authorize
+                                .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers(
                                         "/",
+                                        "/favicon.ico",
                                         "/*.html",
                                         "/login.html",
                                         "/signup.html",
@@ -54,12 +56,16 @@ public class SecurityConfig {
                                         "/js/**",
                                         "/images/**",
                                         "/favicon.ico",
-                                        "/api/auth/**"
+                                        "/api/auth/**",
+                                        "/api/plans/**",
+                                        "/api/users/**",
+                                        "/api/users/by-username",
+                                        "/api/users/by-email"
                                 ).permitAll()
                                 .anyRequest().authenticated()
-                ).exceptionHandling( exception -> exception
+                ).exceptionHandling(exception -> exception
                         .authenticationEntryPoint(authenticationEntryPoint)
-                ).sessionManagement( session -> session
+                ).sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
 

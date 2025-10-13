@@ -1,8 +1,8 @@
 package org.project.backend.model;
 
-
 import jakarta.persistence.*;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Set;
 
 @Entity
@@ -18,15 +18,20 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(name = "password_hash",nullable = false)
+    @Column(name = "password_hash", nullable = false)
     private String password;
 
-    @ManyToOne
-    @JoinColumn(name = "plan_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "plan_id", referencedColumnName = "id")
     private SubscriptionPlan plan;
 
+    @Column(name = "subscription_end_date")
     private Timestamp subscriptionEndDate;
+
+    @Column(name = "created_at", updatable = false)
     private Timestamp createdAt;
+
+    @Column(name = "updated_at")
     private Timestamp updatedAt;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -36,6 +41,18 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
+
+    // Auto set timestamps
+    @PrePersist
+    protected void onCreate() {
+        createdAt = Timestamp.from(Instant.now());
+        updatedAt = Timestamp.from(Instant.now());
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = Timestamp.from(Instant.now());
+    }
 
     // Getters and Setters
 

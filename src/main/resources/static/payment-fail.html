@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Thanh toán thất bại</title>
+    <style>
+        body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; margin:0; padding:24px; background:#fff6f6; color:#3b0f0f }
+        .card { background:white; border-radius:12px; padding:20px; box-shadow:0 6px 20px rgba(0,0,0,0.06); max-width:720px; margin:20px auto }
+        h1 { margin:0 0 12px 0; color:#7f1d1d }
+        .err { color:#991b1b }
+        a { color:#7f1d1d }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>Thanh toán thất bại</h1>
+    <p id="msg">Rất tiếc — giao dịch không thành công.</p>
+    <p>Mã lỗi / giao dịch: <strong id="tx">-</strong></p>
+    <p>Gói: <strong id="plan">-</strong></p>
+    <p>Email: <strong id="email">-</strong></p>
+    <p style="margin-top:12px"><a href="payment.html">Thử lại</a> · <a href="plans.html">Quay về danh sách gói</a></p>
+</div>
+
+<script>
+    const q = Object.fromEntries(new URLSearchParams(location.search));
+    document.getElementById('tx').textContent = q.tx || '-';
+    document.getElementById('plan').textContent = q.plan || '-';
+    document.getElementById('email').textContent = q.email || '-';
+</script>
+</body>
+</html>
