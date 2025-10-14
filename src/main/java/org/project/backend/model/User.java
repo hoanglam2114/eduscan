@@ -1,8 +1,9 @@
 package org.project.backend.model;
 
+
 import jakarta.persistence.*;
+
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Set;
 
 @Entity
@@ -18,20 +19,15 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(name = "password_hash", nullable = false)
+    @Column(name = "password_hash",nullable = false)
     private String password;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "plan_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "plan_id")
     private SubscriptionPlan plan;
 
-    @Column(name = "subscription_end_date")
     private Timestamp subscriptionEndDate;
-
-    @Column(name = "created_at", updatable = false)
     private Timestamp createdAt;
-
-    @Column(name = "updated_at")
     private Timestamp updatedAt;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -41,18 +37,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
-
-    // Auto set timestamps
-    @PrePersist
-    protected void onCreate() {
-        createdAt = Timestamp.from(Instant.now());
-        updatedAt = Timestamp.from(Instant.now());
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = Timestamp.from(Instant.now());
-    }
 
     // Getters and Setters
 
@@ -126,5 +110,28 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+// (Các trường id, username, email, password, roles... giữ nguyên)
+
+    // Thêm liên kết một-một đến UserProfile
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private UserProfile userProfile;
+
+    // Getters and Setters for userProfile
+    public UserProfile getUserProfile() {
+        return userProfile;
+    }
+
+    public void setUserProfile(UserProfile userProfile) {
+        // Đảm bảo tính nhất quán của liên kết
+        if (userProfile == null) {
+            if (this.userProfile != null) {
+                this.userProfile.setUser(null);
+            }
+        } else {
+            userProfile.setUser(this);
+        }
+        this.userProfile = userProfile;
     }
 }

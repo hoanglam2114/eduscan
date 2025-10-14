@@ -43,7 +43,6 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authorize) ->
                         authorize
-                                .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers(
                                         "/",
                                         "/favicon.ico",
@@ -57,10 +56,12 @@ public class SecurityConfig {
                                         "/images/**",
                                         "/favicon.ico",
                                         "/api/auth/**",
+                                        "/api/assist/**",
                                         "/api/plans/**",
                                         "/api/users/**",
                                         "/api/users/by-username",
-                                        "/api/users/by-email"
+                                        "/api/users/by-email",
+                                        "/api/assist/**"
                                 ).permitAll()
                                 .anyRequest().authenticated()
                 ).exceptionHandling(exception -> exception

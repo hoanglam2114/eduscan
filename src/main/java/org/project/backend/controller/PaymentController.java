@@ -67,7 +67,7 @@ public class PaymentController {
             paymentRepo.save(transaction);
 
             // Update user subscription (30 days)
-            userService.updateUserPlan(userId, planId, 30);
+//            userService.updateUserPlan(userId, planId, 30);
 
             // Get updated user data
             user = userRepository.findById(userId).orElseThrow();

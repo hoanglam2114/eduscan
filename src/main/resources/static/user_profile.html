@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduScan - User Profile</title>
+    <link rel="stylesheet" href="css/user_profile.css">
+    <style>
+
+    </style>
+</head>
+<body>
+<div class="main-app">
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
+                <div class="logo-icon">
+                    <!--                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+                    <!--                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>-->
+                    <!--                        <path d="M2 17L12 22L22 17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>-->
+                    <!--                        <path d="M2 12L12 17L22 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>-->
+                    <!--                    </svg>-->
+                    <img src="images/1.png" alt="EduScan Logo" class="logo-image" height="50px">
+                </div>
+                <h1>EduScan</h1>
+            </div>
+            <div class="user-section" id="user-section">
+                <span class="welcome-text">Welcome, <span id="userName">John Doe</span></span>
+                <button class="upgrade-btn">Upgrade to PRO</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app-main">
+        <!-- Sidebar -->
+        <aside class="app-sidebar closed" id="sidebar">
+            <div class="sidebar-header-mobile">
+<!--                <button class="sidebar-close" id="sidebarClose" aria-label="Close sidebar">×</button>-->
+            </div>
+
+            <div class="sidebar-top">
+                <div class="sidebar-avatar" id="sidebarAvatar">J</div>
+                <div class="sidebar-user">
+                    <div class="sidebar-name" id="sidebarName">John Doe</div>
+                    <div class="sidebar-email" id="sidebarEmail">john@example.com</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="sidebar-item active" data-view="home">
+                    <a href="index.html">Home</a></button>
+                <button class="sidebar-item" data-view="profile">
+                    <a href="user_profile.html">Profile</a></button>
+<!--                <button class="sidebar-item" data-view="history">Scan History</button>-->
+            </nav>
+
+            <div class="sidebar-bottom">
+                <button class="sidebar-logout" id="logoutBtn">
+                    <p id="logout-text">Logout</p>
+                </button>
+            </div>
+        </aside>
+
+
+        <!-- Content Container -->
+        <div class="container">
+            <!-- Loading State -->
+            <div id="loadingState" class="profile-section loading">
+                <div class="loading-spinner"></div>
+                <p style="color: #6b7280;">Đang tải thông tin người dùng...</p>
+            </div>
+
+            <!-- Profile Section -->
+            <div class="profile-section" id="profileSection" style="display: none;">
+                <div class="profile-header">
+                    <div class="profile-avatar-large" id="profileAvatar">?</div>
+                    <div class="profile-header-info">
+                        <h2 id="profileFullName">Đang tải...</h2>
+                        <p id="profileEmail">email@example.com</p>
+                        <span class="profile-plan-badge" id="profilePlan">FREE PLAN</span>
+                    </div>
+                </div>
+
+                <div class="profile-content">
+                    <div class="profile-field">
+                        <div class="profile-field-label">👤 Tên đăng nhập</div>
+                        <div class="profile-field-value" id="fieldUsername">-</div>
+                    </div>
+
+                    <div class="profile-field">
+                        <div class="profile-field-label">📧 Email</div>
+                        <div class="profile-field-value" id="fieldEmail">-</div>
+                    </div>
+
+                    <div class="profile-field">
+                        <div class="profile-field-label">⚧ Giới tính</div>
+                        <div class="profile-field-value" id="fieldGender">
+                            <span class="profile-field-empty">Chưa cập nhật</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-field">
+                        <div class="profile-field-label">🎂 Tuổi</div>
+                        <div class="profile-field-value" id="fieldAge">
+                            <span class="profile-field-empty">Chưa cập nhật</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-field">
+                        <div class="profile-field-label">📱 Số điện thoại</div>
+                        <div class="profile-field-value" id="fieldPhone">
+                            <span class="profile-field-empty">Chưa cập nhật</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-field">
+                        <div class="profile-field-label">💼 Nghề nghiệp</div>
+                        <div class="profile-field-value" id="fieldJob">
+                            <span class="profile-field-empty">Chưa cập nhật</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <button class="btn-edit" id="btnEditProfile">✏️ Chỉnh sửa thông tin</button>
+                    <button class="btn-change-password" id="btnChangePassword">🔒 Đổi mật khẩu</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="js/user_profile.js">
+
+</script>
+</body>
+</html>

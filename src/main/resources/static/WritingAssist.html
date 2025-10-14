@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Writing Assistance - Edu Scan</title>
+  <link rel="stylesheet" href="css/writing_assist.css">
+  <style>
+
+  </style>
+</head>
+<body>
+<div class="animated-background">
+  <div class="gradient-overlay"></div>
+</div>
+
+<div class="writing-assist-container">
+  <header class="wa-header">
+    <button class="back-button" onclick="history.back()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Quay lại
+    </button>
+    <div class="header-title">
+      <div class="title-icon">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M18.5 2.49998C18.8978 2.10216 19.4374 1.87866 20 1.87866C20.5626 1.87866 21.1022 2.10216 21.5 2.49998C21.8978 2.89781 22.1213 3.43737 22.1213 3.99998C22.1213 4.56259 21.8978 5.10216 21.5 5.49998L12 15L8 16L9 12L18.5 2.49998Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <h1>Writing Assistance</h1>
+        <p>Trợ lý viết nội dung thông minh với AI</p>
+      </div>
+    </div>
+    <div class="wa-usage">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+        <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      Free: <span id="usageCount">0</span>/5 hôm nay
+    </div>
+  </header>
+
+  <main class="wa-main-content">
+    <div class="wa-container">
+      <section class="templates-section">
+        <label class="section-label">Mẫu nội dung</label>
+        <div class="wa-templates" id="templateList">
+          <button class="wa-template" data-prompt="Viết email chuyên nghiệp">Email chuyên nghiệp</button>
+          <button class="wa-template" data-prompt="Viết bài đăng mạng xã hội">Bài đăng social</button>
+          <button class="wa-template" data-prompt="Tóm tắt nội dung">Tóm tắt văn bản</button>
+          <button class="wa-template" data-prompt="Viết bài blog">Bài viết blog</button>
+          <button class="wa-template" data-prompt="Dịch sang tiếng Anh">Dịch tiếng Anh</button>
+        </div>
+      </section>
+
+      <section class="editor-section">
+        <label class="editor-label">Nhập yêu cầu của bạn</label>
+        <textarea
+                class="writing-input"
+                id="promptInput"
+                placeholder="Nhập mô tả chi tiết về nội dung bạn muốn tạo hoặc chọn một mẫu bên trái..."
+        ></textarea>
+
+        <div class="button-group">
+<!--          <button class="action-button secondary" id="">File</button>-->
+          <button class="action-button primary" id="generateBtn">
+            <span id="generateBtnText">Tạo nội dung</span>
+          </button>
+          <button class="action-button secondary" id="clearBtn">Xóa</button>
+          <button class="action-button upgrade" id="upgradeBtn">
+            ⚡ Nâng cấp Pro
+          </button>
+        </div>
+
+        <div id="resultContainer" class="result-section" style="display: none;">
+          <div class="result-header">
+            <h3>Kết quả</h3>
+            <div class="result-actions">
+              <button class="result-btn" id="copyBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="display: inline; margin-right: 4px;">
+                  <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2"/>
+                  <path d="M5 15H4C3.46957 15 2.96086 14.7893 2.58579 14.4142C2.21071 14.0391 2 13.5304 2 13V4C2 3.46957 2.21071 2.96086 2.58579 2.58579C2.96086 2.21071 3.46957 2 4 2H13C13.5304 2 14.0391 2.21071 14.4142 2.58579C14.7893 2.96086 15 3.46957 15 4V5" stroke="currentColor" stroke-width="2"/>
+                </svg>
+                Sao chép
+              </button>
+              <button class="result-btn" id="downloadBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="display: inline; margin-right: 4px;">
+                  <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Tải xuống
+              </button>
+            </div>
+          </div>
+
+          <div id="processingView" class="processing-animation" style="display: none;">
+            <div class="processing-spinner">
+              <div class="spinner-ring"></div>
+            </div>
+            <p>AI đang tạo nội dung cho bạn...</p>
+          </div>
+
+          <div id="resultDisplayView">
+            <textarea id="resultText" class="result-textarea" placeholder="Kết quả sẽ hiển thị ở đây..."></textarea>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<script src="js/writing_assist.js">
+
+</script>
+</body>
+</html>

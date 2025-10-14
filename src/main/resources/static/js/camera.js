@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('authToken');
     // DOM Elements
     const allViews = document.querySelectorAll('.view');
     const cameraStartView = document.getElementById('camera-start-view');
@@ -78,6 +79,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- API Calls ---
     const handleProcessOCR = async () => {
+
+        if (!token) {
+            // Nếu không có token, người dùng chưa đăng nhập.
+            alert('Vui lòng đăng nhập để sử dụng chức năng này.');
+            // Chuyển ngay về trang đăng nhập.
+            window.location.href = 'login.html';
+            return; // Dừng thực thi tất cả các mã còn lại trong file này
+        }
+
         if (isLimitReached()) {
             showLimitReachedModal();
             return;

@@ -16,8 +16,6 @@ public class WebConfig implements WebMvcConfigurer {
                         "https://www.eduscan.top"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
-                .allowedHeaders("*")
-                .allowCredentials(true)
-                .maxAge(3600);
+                .allowedHeaders("*");
     }
 }

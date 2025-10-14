@@ -3,94 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edu Scan - Trang chủ</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>EduScan - Document OCR Scanner</title>
     <link rel="stylesheet" href="css/index.css">
+
 </head>
-<body class="main-app">
-<div class="animated-background">
-    <div class="gradient-overlay"></div>
+<body>
+<div class="main-app">
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
+                <div class="logo-icon">
+                    <!--                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+                    <!--                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>-->
+                    <!--                        <path d="M2 17L12 22L22 17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>-->
+                    <!--                        <path d="M2 12L12 17L22 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>-->
+                    <!--                    </svg>-->
+                    <img src="images/1.png" alt="EduScan Logo" class="logo-image" height="50px">
+                </div>
+                <h1>EduScan</h1>
+            </div>
+            <div class="user-section" id="user-section">
+                <button class="hamburger" id="hamburgerBtn" aria-label="Toggle sidebar">☰</button>
+                <span class="welcome-text">Welcome, <span id="userName">John Doe</span></span>
+                <a href="plans.html" class="upgrade-btn">Upgrade to PRO</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app-main">
+        <!-- Sidebar -->
+        <aside class="app-sidebar closed" id="sidebar">
+            <div class="sidebar-header-mobile">
+                <button class="sidebar-close" id="sidebarClose" aria-label="Close sidebar">×</button>
+            </div>
+
+            <div class="sidebar-top">
+                <div class="sidebar-avatar" id="sidebarAvatar">J</div>
+                <div class="sidebar-user">
+                    <div class="sidebar-name" id="sidebarName">John Doe</div>
+                    <div class="sidebar-email" id="sidebarEmail">john@example.com</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="sidebar-item active" data-view="home">
+                    <a href="index.html">Home</a></button>
+                <button class="sidebar-item" data-view="profile">
+                    <a href="user_profile.html">Profile</a></button>
+<!--                <button class="sidebar-item" data-view="history">Scan History</button>-->
+            </nav>
+
+            <div class="sidebar-bottom">
+                <button class="sidebar-logout" id="logoutBtn">
+                    <p id="logout-text">Logout</p>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Content Container -->
+        <div class="container">
+            <div class="upload-section">
+                <h2>Document OCR Scanner</h2>
+                <p>Chọn phương thức trích xuất văn bản phù hợp với nhu cầu của bạn</p>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button class="handwriting-ocr-btn">
+                        <div class="btn-icon">✍️</div>
+                        <div class="btn-content">
+                            <h3>Quét Văn Bản Viết Tay</h3>
+                            <p>Chuyển đổi chữ viết tay thành văn bản số</p>
+                        </div>
+                        <div class="btn-arrow">→</div>
+                    </button>
+
+                    <button class="camera-ocr-btn">
+                        <div class="btn-icon">📷</div>
+                        <div class="btn-content">
+                            <h3>Chụp Ảnh Văn Bản</h3>
+                            <p>Sử dụng camera để chụp và trích xuất văn bản</p>
+                        </div>
+                        <div class="btn-arrow">→</div>
+                    </button>
+
+                    <button class="writing-assist-btn">
+                        <div class="btn-icon">✨</div>
+                        <div class="btn-content">
+                            <h3>Writing Help</h3>
+                            <p>Get AI-assisted writing (emails, summaries)</p>
+                        </div>
+                        <div class="btn-arrow">→</div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
 </div>
 
-<header class="app-header">
-    <div class="header-content">
-        <div class="logo-section">
-            <img src="images/1.png" alt="Edu Scan Logo" class="logo-image" height="70px" width="70px">
-            <h1 style="color: #cfe9ff">Edu Scan</h1>
-        </div>
+<script src="js/index.js">
+</script>
 
-        <div id="user-section" class="user-section">
-        </div>
 
-    </div>
-</header>
-
-<main class="container">
-    <h2 class="main-title">Chọn chức năng chính</h2>
-    <div class="button-grid">
-        <a href="handwriting-ocr.html" class="menu-btn">
-            <div class="btn-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z" stroke="currentColor"
-                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                    <path d="M14 2v6h6m-4 5H8m8 4H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                          stroke-linejoin="round"></path>
-                </svg>
-            </div>
-            <div class="btn-content">
-                <h3>Nhận dạng chữ viết tay</h3>
-                <p>Tải ảnh lên để quét và trích xuất chữ viết tay</p>
-            </div>
-        </a>
-
-        <a href="camera.html" class="menu-btn">
-            <div class="btn-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                    <circle cx="12" cy="13" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round"></circle>
-                </svg>
-            </div>
-            <div class="btn-content">
-                <h3>Chụp ảnh văn bản</h3>
-                <p>Sử dụng camera để chụp và trích xuất văn bản</p>
-            </div>
-        </a>
-    </div>
-
-    <section style="margin-top: 60px; text-align: center;">
-        <h2 style="font-size: 28px; margin-bottom: 20px; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.3);">
-            Nâng tầm trải nghiệm của bạn
-        </h2>
-        <a href="plans.html" style="display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 50px; font-weight: 600; font-size: 18px; box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4); transition: all 0.3s ease; position: relative; overflow: hidden;">
-            <span style="position: relative; z-index: 1;">✨ Nâng cấp gói</span>
-        </a>
-    </section>
-    <style>
-        .update-button a:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 28px rgba(102, 126, 234, 0.6) !important;
-        }
-
-        .update-button a:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .update-button a:hover:before {
-            left: 100%;
-        }
-    </style>
-</main>
-
-<script src="js/background.js"></script>
-<script src="js/index.js"></script>
 </body>
 </html>

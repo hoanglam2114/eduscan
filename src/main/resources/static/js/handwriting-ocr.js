@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // ===================================================
+    // LỚP BẢO VỆ: KIỂM TRA ĐĂNG NHẬP KHI TẢI TRANG
+    // ===================================================
+    const token = localStorage.getItem('authToken');
+
+
     // DOM Elements - Gán vào các biến
     const uploadView = document.getElementById('upload-view');
     const previewView = document.getElementById('preview-view');
@@ -73,6 +79,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- API Calls ---
     if (processButton) processButton.addEventListener('click', async () => {
+        if (!token) {
+            // Nếu không có token, người dùng chưa đăng nhập.
+            alert('Vui lòng đăng nhập để sử dụng chức năng này.');
+            // Chuyển ngay về trang đăng nhập.
+            window.location.href = 'login.html';
+            return; // Dừng thực thi tất cả các mã còn lại trong file này
+        }
+        // ===================================================
         // Kiểm tra sự tồn tại của hàm trước khi gọi
         if (typeof isLimitReached === 'function' && isLimitReached()) {
             showLimitReachedModal();
